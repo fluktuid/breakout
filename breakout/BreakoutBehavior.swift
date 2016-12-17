@@ -162,16 +162,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         dynamicAnimator?.addBehavior(viewPush)
     }
     
-    func removeView(_ view: UIView, animated: Bool = true) {
-        if animated == true {
-            UIView.transition(with: view, duration: 1.0,
-                              options: .transitionFlipFromTop,
-                              animations: { },
-                              completion: { (finished: Bool) -> Void in
-                                self.removeView(view, animated: false)
-            })
-            return
-        }
+    func removeView(_ view: UIView) {
         switch view.type {
         case .ball:
             ballBehavior.removeItem(view)
@@ -221,7 +212,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             if brickAttachments.count == 1 {
                 delegate?.winGame()
             }
-            removeView(brickView!, animated: true)
+            removeView(brickView!)
         }
     }
     

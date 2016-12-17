@@ -79,7 +79,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     
     func startGame() {
         for view in breakoutView.subviews {
-            breakoutGame.removeView(view, animated: false)
+            breakoutGame.removeView(view)
         }
         
         breakoutView.type = BreakoutViewType.boundary
