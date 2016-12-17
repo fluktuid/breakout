@@ -10,7 +10,7 @@
 import UIKit
 
 public enum BreakoutViewType: Int {
-    case ball = 2
+    case ball = 1
     case paddle
     case brick
     case boundary

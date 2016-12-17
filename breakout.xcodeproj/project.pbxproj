@@ -15,13 +15,9 @@
 		8E3297A21DFEBEB90021B5D8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E3297A01DFEBEB90021B5D8 /* LaunchScreen.storyboard */; };
 		8E3297AD1DFEBEBA0021B5D8 /* breakoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3297AC1DFEBEBA0021B5D8 /* breakoutTests.swift */; };
 		8E3297B81DFEBEBA0021B5D8 /* breakoutUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3297B71DFEBEBA0021B5D8 /* breakoutUITests.swift */; };
-		8E3297C61DFEBFD50021B5D8 /* Brick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3297C51DFEBFD50021B5D8 /* Brick.swift */; };
-		8E3297C81DFEC0420021B5D8 /* BrickBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3297C71DFEC0420021B5D8 /* BrickBrain.swift */; };
-		8E3297CA1DFEC76C0021B5D8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3297C91DFEC76C0021B5D8 /* Constants.swift */; };
 		8EE739421E0566CD00720FB1 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE739411E0566CD00720FB1 /* TableViewController.swift */; };
 		8EE739441E05672B00720FB1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE739431E05672B00720FB1 /* AppDelegate.swift */; };
-		8EFFEE251E04633700817747 /* BreakoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFEE241E04633700817747 /* BreakoutView.swift */; };
-		8EFFEE271E04748C00817747 /* Paddle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFEE261E04748C00817747 /* Paddle.swift */; };
+		8EE739461E05713100720FB1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE739451E05713100720FB1 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,13 +52,9 @@
 		8E3297B31DFEBEBA0021B5D8 /* breakoutUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = breakoutUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E3297B71DFEBEBA0021B5D8 /* breakoutUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = breakoutUITests.swift; sourceTree = "<group>"; };
 		8E3297B91DFEBEBA0021B5D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8E3297C51DFEBFD50021B5D8 /* Brick.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Brick.swift; sourceTree = "<group>"; };
-		8E3297C71DFEC0420021B5D8 /* BrickBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrickBrain.swift; sourceTree = "<group>"; };
-		8E3297C91DFEC76C0021B5D8 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8EE739411E0566CD00720FB1 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		8EE739431E05672B00720FB1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8EFFEE241E04633700817747 /* BreakoutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreakoutView.swift; sourceTree = "<group>"; };
-		8EFFEE261E04748C00817747 /* Paddle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paddle.swift; sourceTree = "<group>"; };
+		8EE739451E05713100720FB1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,11 +111,7 @@
 				8E32979E1DFEBEB90021B5D8 /* Assets.xcassets */,
 				8E3297A01DFEBEB90021B5D8 /* LaunchScreen.storyboard */,
 				8E3297A31DFEBEB90021B5D8 /* Info.plist */,
-				8E3297C51DFEBFD50021B5D8 /* Brick.swift */,
-				8E3297C71DFEC0420021B5D8 /* BrickBrain.swift */,
-				8E3297C91DFEC76C0021B5D8 /* Constants.swift */,
-				8EFFEE241E04633700817747 /* BreakoutView.swift */,
-				8EFFEE261E04748C00817747 /* Paddle.swift */,
+				8EE739451E05713100720FB1 /* Constants.swift */,
 				8E1471F61E04999C006C1F5B /* BreakoutBehavior.swift */,
 				8EE739411E0566CD00720FB1 /* TableViewController.swift */,
 				8EE739431E05672B00720FB1 /* AppDelegate.swift */,
@@ -284,15 +272,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E32979A1DFEBEB90021B5D8 /* BreakoutViewController.swift in Sources */,
-				8E3297C81DFEC0420021B5D8 /* BrickBrain.swift in Sources */,
 				8EE739421E0566CD00720FB1 /* TableViewController.swift in Sources */,
-				8EFFEE251E04633700817747 /* BreakoutView.swift in Sources */,
-				8E3297CA1DFEC76C0021B5D8 /* Constants.swift in Sources */,
-				8EFFEE271E04748C00817747 /* Paddle.swift in Sources */,
 				8E1471FD1E049A0C006C1F5B /* Ball.swift in Sources */,
+				8EE739461E05713100720FB1 /* Constants.swift in Sources */,
 				8E1471F71E04999C006C1F5B /* BreakoutBehavior.swift in Sources */,
 				8EE739441E05672B00720FB1 /* AppDelegate.swift in Sources */,
-				8E3297C61DFEBFD50021B5D8 /* Brick.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

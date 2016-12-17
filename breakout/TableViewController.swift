@@ -15,12 +15,19 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var brickColumnsStepper: UIStepper!
     @IBOutlet weak var brickColumnsStepperLabel: UILabel!
     
+    @IBOutlet weak var ballCount: UILabel!
+    
     @IBOutlet weak var ballSizeSegmentedControl: UISegmentedControl!
     @IBOutlet weak var ballStartAngleSpreadSlider: UISlider!
-    struct BallSizeSegmentedControl {
-        static var Small = (SegmentIndex: 0, Size: CGFloat(15.0))
-        static var Medium = (SegmentIndex: 1, Size: CGFloat(25.0))
-        static var Large = (SegmentIndex: 2, Size: CGFloat(40.0))
+    struct ballSize {
+        static var small = (SegmentIndex: 0, Size: CGFloat(15.0))
+        static var medium = (SegmentIndex: 1, Size: CGFloat(25.0))
+        static var large = (SegmentIndex: 2, Size: CGFloat(40.0))
+    }
+    struct ballSpreadAngle {
+        static var small = (index: 0, angle: CGFloat(0.04))
+        static var medium = (index: 1, angle: CGFloat(0.2))
+        static var large = (index: 2, angle: CGFloat(0.43))
     }
     
     @IBOutlet weak var gameContinueAfterGameOverSwitch: UISwitch!
@@ -38,12 +45,12 @@ class SettingsTableViewController: UITableViewController {
         brickColumnsStepper.value = Double(AppDelegate.Settings.Brick.Columns)
         brickColumnsStepperLabel.text = "\(AppDelegate.Settings.Brick.Columns)"
         
-        if AppDelegate.Settings.Ball.Size <= BallSizeSegmentedControl.Small.Size {
-            ballSizeSegmentedControl.selectedSegmentIndex = BallSizeSegmentedControl.Small.SegmentIndex
-        } else if BallSizeSegmentedControl.Large.Size <= AppDelegate.Settings.Ball.Size {
-            ballSizeSegmentedControl.selectedSegmentIndex = BallSizeSegmentedControl.Large.SegmentIndex
+        if AppDelegate.Settings.Ball.Size <= ballSize.small.Size {
+            ballSizeSegmentedControl.selectedSegmentIndex = ballSize.small.SegmentIndex
+        } else if ballSize.large.Size <= AppDelegate.Settings.Ball.Size {
+            ballSizeSegmentedControl.selectedSegmentIndex = ballSize.large.SegmentIndex
         } else {
-            ballSizeSegmentedControl.selectedSegmentIndex = BallSizeSegmentedControl.Medium.SegmentIndex
+            ballSizeSegmentedControl.selectedSegmentIndex = ballSize.medium.SegmentIndex
         }
         
         gameContinueAfterGameOverSwitch.isOn = AppDelegate.Settings.Game.ContinueAfterGameOver
@@ -62,18 +69,39 @@ class SettingsTableViewController: UITableViewController {
         AppDelegate.Settings.Brick.Columns = numColumns;
     }
     
-    @IBAction func ballSizeSegmentedControlValueChanged(_ sender: UISegmentedControl) {
+    @IBAction func ballCountStepper(_ sender: UIStepper) {
+        let balls = Int(sender.value)
+        ballCount.text = String(balls)
+        AppDelegate.Settings.Ball.CountOfBalls = balls
+    }
+    
+    @IBAction func actionBallSize(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-        case BallSizeSegmentedControl.Small.SegmentIndex:
-            AppDelegate.Settings.Ball.Size = BallSizeSegmentedControl.Small.Size
-        case BallSizeSegmentedControl.Medium.SegmentIndex:
-            AppDelegate.Settings.Ball.Size = BallSizeSegmentedControl.Medium.Size
-        case BallSizeSegmentedControl.Large.SegmentIndex:
-            AppDelegate.Settings.Ball.Size = BallSizeSegmentedControl.Large.Size
+        case ballSize.small.SegmentIndex:
+            AppDelegate.Settings.Ball.Size = ballSize.small.Size
+        case ballSize.medium.SegmentIndex:
+            AppDelegate.Settings.Ball.Size = ballSize.medium.Size
+        case ballSize.large.SegmentIndex:
+            AppDelegate.Settings.Ball.Size = ballSize.large.Size
         default:
-            AppDelegate.Settings.Ball.Size = BallSizeSegmentedControl.Medium.Size
+            AppDelegate.Settings.Ball.Size = ballSize.medium.Size
         }
     }
+    
+    @IBAction func actionBallSpreadAngle(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case ballSpreadAngle.small.index:
+            AppDelegate.Settings.Ball.StartSpreadAngle = ballSpreadAngle.small.angle
+        case ballSpreadAngle.medium.index:
+            AppDelegate.Settings.Ball.StartSpreadAngle = ballSpreadAngle.medium.angle
+        case ballSpreadAngle.large.index:
+            AppDelegate.Settings.Ball.StartSpreadAngle = ballSpreadAngle.large.angle
+        default:
+            AppDelegate.Settings.Ball.StartSpreadAngle = ballSpreadAngle.medium.angle
+        }
+    }
+    
+    
     
     @IBAction func ballStartAngleSpreadSliderValueChanged(_ sender: UISlider) {
         AppDelegate.Settings.Ball.StartSpreadAngle = CGFloat(sender.value)

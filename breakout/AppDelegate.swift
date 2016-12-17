@@ -25,6 +25,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 get { return Defaults.object(forKey: "Ball.StartSpreadAngle") as? CGFloat ?? CGFloat(M_PI/8) }
                 set { Defaults.set(newValue, forKey: "Ball.StartSpreadAngle") }
             }
+            static var CountOfBalls: Int {
+                get { return Defaults.object(forKey: "Ball.CountOfBalls") as? Int ?? 5 }
+                set { Defaults.set(newValue, forKey: "Ball.CountOfBalls") }
+            }
         }
         struct Brick {
             static var Rows: Int {
