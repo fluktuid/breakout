@@ -19,6 +19,7 @@ public enum BreakoutViewType: Int {
 public protocol BreakoutGameDelegate {
     func winGame() -> Void
     func endGame() -> Void
+    func updateCurrentBadge() -> Void
 }
 
 public extension UIView {
@@ -34,7 +35,7 @@ public extension UIView {
 
 class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     
-    lazy fileprivate var collider: UICollisionBehavior = {
+    lazy private var collider: UICollisionBehavior = {
         let collider = UICollisionBehavior()
         collider.translatesReferenceBoundsIntoBoundary = false
         collider.collisionMode = UICollisionBehaviorMode.everything
@@ -42,7 +43,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         return collider
     }()
     
-    lazy fileprivate var ballBehavior: UIDynamicItemBehavior = {
+    lazy private var ballBehavior: UIDynamicItemBehavior = {
         let ballBehavior = UIDynamicItemBehavior()
         ballBehavior.allowsRotation = true
         ballBehavior.density = 1.0
@@ -53,7 +54,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         return ballBehavior
     }()
     
-    lazy fileprivate var paddleBehavior: UIDynamicItemBehavior = {
+    lazy private var paddleBehavior: UIDynamicItemBehavior = {
         let paddleBehavior = UIDynamicItemBehavior()
         
         //setzt die Einstellungen für alles
@@ -66,7 +67,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         return paddleBehavior
     }()
     
-    lazy fileprivate var brickBehavior: UIDynamicItemBehavior = {
+    lazy private var brickBehavior: UIDynamicItemBehavior = {
         let brickBehavior = UIDynamicItemBehavior()
         
         //setzt die Einstellungen für alles
@@ -79,9 +80,9 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         return brickBehavior
     }()
     
-    lazy fileprivate var paddleAttachment: UIAttachmentBehavior? = nil
+    lazy private var paddleAttachment: UIAttachmentBehavior? = nil
     
-    lazy fileprivate var brickAttachments: [UIView: UIAttachmentBehavior] = [:]
+    lazy private var brickAttachments: [UIView: UIAttachmentBehavior] = [:]
     
     var delegate: BreakoutGameDelegate? = nil
     
@@ -152,7 +153,11 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         }
         dynamicAnimator?.addBehavior(viewPush)
     }
-    
+    func changeBrickColor(_ view: UIView, toColor: UIColor) {
+        UIView.animate(withDuration: 0.5) {
+            view.backgroundColor = toColor
+        }
+    }
     
     func removeView(_ view: UIView, animated: Bool = false) {
         
@@ -218,11 +223,17 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
                 delegate?.winGame()
             }
             if(brickView!.backgroundColor == Constants.Brick.HarderBackgroundColor) {
-                brickView!.backgroundColor = Constants.Brick.BackgroundColor
+                changeBrickColor(brickView!,toColor: Constants.Brick.BackgroundColor)
             } else {
                 removeView(brickView!, animated: true)
             }
+            addPoint()
         }
+    }
+    
+    func addPoint() {
+        AppDelegate.Score.current.points = AppDelegate.Score.current.points + 1
+        delegate?.updateCurrentBadge()
     }
     
     func collisionBehavior(_ behavior: UICollisionBehavior, endedContactFor item1: UIDynamicItem, with item2: UIDynamicItem) {

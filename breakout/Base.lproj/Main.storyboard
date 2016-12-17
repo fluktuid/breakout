@@ -37,7 +37,7 @@
                             <constraint firstAttribute="trailing" secondItem="5fp-Fx-xon" secondAttribute="trailing" id="Zxh-1g-z07"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Breakout" image="BreakoutTab" id="56Q-KP-Czf"/>
+                    <tabBarItem key="tabBarItem" title="Breakout" id="56Q-KP-Czf"/>
                     <connections>
                         <outlet property="breakoutView" destination="5fp-Fx-xon" id="10V-3U-HKu"/>
                     </connections>
@@ -349,7 +349,7 @@
         <scene sceneID="ind-5x-yoH">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="iSS-z1-owz" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" selectedImage="BreakoutTab" id="Kng-cS-Ehl"/>
+                    <tabBarItem key="tabBarItem" title="Settings" id="Kng-cS-Ehl"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HGe-4n-Fv6">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -365,7 +365,4 @@
             <point key="canvasLocation" x="2224" y="560"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="BreakoutTab" width="25" height="25"/>
-    </resources>
 </document>

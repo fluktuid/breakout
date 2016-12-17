@@ -47,6 +47,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    struct Score {
+        static let Defaults = UserDefaults.standard
+        struct current {
+            static var points: Int {
+                get { return Defaults.object(forKey: "current.points") as? Int ?? 0 }
+                set { Defaults.set(newValue, forKey: "current.points") }
+            }
+        }
+        struct best {
+            static var points: Int {
+                get { return Defaults.object(forKey: "current.points") as? Int ?? 0 }
+                set { Defaults.set(newValue, forKey: "current.points") }
+            }
+        }
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

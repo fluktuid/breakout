@@ -78,6 +78,8 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     // MARK: - Breakout game
     
     func startGame() {
+        AppDelegate.Score.current.points = 0
+        
         for view in breakoutView.subviews {
             breakoutGame.removeView(view)
         }
@@ -131,7 +133,9 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     func winGame() {
-        let alert = UIAlertController(title: "Victory", message: "All Bricks are destroyed", preferredStyle: UIAlertControllerStyle.alert)
+        breakoutGame.pauseGame()
+        
+        let alert = UIAlertController(title: "Victory", message: "You scored \(AppDelegate.Score.current.points + 1) points", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in
             self.startGame()
@@ -139,6 +143,10 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         alert.addAction(newGameAction)
         breakoutGame.pauseGame()
         present(alert, animated: true, completion: nil)
+    }
+    
+    func updateCurrentBadge() {
+        tabBarController?.tabBar.items![0].badgeValue = String(AppDelegate.Score.current.points)
     }
     
     func endGame() {
