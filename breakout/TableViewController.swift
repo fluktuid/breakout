@@ -15,11 +15,14 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var brickColumnsStepper: UIStepper!
     @IBOutlet weak var brickColumnsStepperLabel: UILabel!
     
-    @IBOutlet weak var ballCount: UILabel!
+    @IBOutlet weak var ballCountStepper: UIStepper!
+    @IBOutlet weak var ballCountStepperLabel: UILabel!
     
-    @IBOutlet weak var ballSizeSegmentedControl: UISegmentedControl!
-    @IBOutlet weak var ballStartAngleSpreadSlider: UISlider!
+    @IBOutlet weak var ballSizeStepper: UIStepper!
+    @IBOutlet weak var ballSizeStepperLabel: UILabel!
     
+    
+    @IBOutlet weak var makeHarderBricksSwitch: UISwitch!
     @IBOutlet weak var gameContinueAfterGameOverSwitch: UISwitch!
     
     // MARK: - View controller life cycle
@@ -34,31 +37,41 @@ class SettingsTableViewController: UITableViewController {
         brickRowsStepperLabel.text = "\(AppDelegate.Settings.Brick.Rows)"
         brickColumnsStepper.value = Double(AppDelegate.Settings.Brick.Columns)
         brickColumnsStepperLabel.text = "\(AppDelegate.Settings.Brick.Columns)"
+        ballCountStepper.value = Double(AppDelegate.Settings.Brick.Rows)
+        ballCountStepperLabel.text = "\(AppDelegate.Settings.Brick.Rows)"
+        ballSizeStepper.value = Double(AppDelegate.Settings.Brick.Columns)
+        ballSizeStepperLabel.text = "\(AppDelegate.Settings.Brick.Columns)"
         
         gameContinueAfterGameOverSwitch.isOn = AppDelegate.Settings.Game.ContinueAfterGameOver
+        makeHarderBricksSwitch.isOn = AppDelegate.Settings.Brick.HarderBricks
     }
     
     // MARK: - Settings value change handling
-    @IBAction func brickRowsStepperValueChanged(_ sender: UIStepper) {
+    @IBAction func brickRowsValueChanged(_ sender: UIStepper) {
         let numRows = Int(sender.value)
         brickRowsStepperLabel.text = "\(numRows)";
         AppDelegate.Settings.Brick.Rows = numRows;
     }
     
-    @IBAction func brickColumnsStepperValueChanged(_ sender: UIStepper) {
+    @IBAction func brickColumnsValueChanged(_ sender: UIStepper) {
         let numColumns = Int(sender.value)
         brickColumnsStepperLabel.text = "\(numColumns)";
         AppDelegate.Settings.Brick.Columns = numColumns;
     }
     
-    @IBAction func ballCountStepper(_ sender: UIStepper) {
+    @IBAction func ballCountValueChanged(_ sender: UIStepper) {
         let balls = Int(sender.value)
-        ballCount.text = String(balls)
+        ballCountStepperLabel.text = "\(balls)"
         AppDelegate.Settings.Ball.CountOfBalls = balls
     }
     
-    @IBAction func ballStartAngleSpreadSliderValueChanged(_ sender: UISlider) {
-        AppDelegate.Settings.Ball.StartSpreadAngle = CGFloat(sender.value)
+    @IBAction func ballSizeValueChanged(_ sender: UIStepper) {
+        let size = Int(sender.value)
+        ballSizeStepperLabel.text = "\(size)"
+        AppDelegate.Settings.Ball.Size = CGFloat(10 + size * 5)
+    }
+    @IBAction func generateHarderBricks(_ sender: UISwitch) {
+        AppDelegate.Settings.Brick.HarderBricks = sender.isOn
     }
     
     @IBAction func gameContinueAfterGameOverValueChanged(_ sender: UISwitch) {

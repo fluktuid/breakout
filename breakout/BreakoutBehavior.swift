@@ -44,20 +44,22 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     
     lazy fileprivate var ballBehavior: UIDynamicItemBehavior = {
         let ballBehavior = UIDynamicItemBehavior()
-        ballBehavior.allowsRotation = false
+        ballBehavior.allowsRotation = true
         ballBehavior.density = 1.0
-        ballBehavior.elasticity = 1.0
-        ballBehavior.friction = 0.0
-        ballBehavior.resistance = 0.0
+        ballBehavior.elasticity = 2.2
+        ballBehavior.friction = 5.0
+        ballBehavior.resistance = -1.0
         ballBehavior.angularResistance = 0.0
         return ballBehavior
     }()
     
     lazy fileprivate var paddleBehavior: UIDynamicItemBehavior = {
         let paddleBehavior = UIDynamicItemBehavior()
+        
+        //setzt die Einstellungen für alles
         paddleBehavior.allowsRotation = false
-        paddleBehavior.density = 500.0
-        paddleBehavior.elasticity = 1.0
+        paddleBehavior.density = 2000.0
+        paddleBehavior.elasticity = 0.0
         paddleBehavior.friction = 0.0
         paddleBehavior.resistance = 0.0
         paddleBehavior.angularResistance = 0.0
@@ -66,9 +68,11 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     
     lazy fileprivate var brickBehavior: UIDynamicItemBehavior = {
         let brickBehavior = UIDynamicItemBehavior()
+        
+        //setzt die Einstellungen für alles
         brickBehavior.allowsRotation = false
-        brickBehavior.density = 100.0
-        brickBehavior.elasticity = 1.0
+        brickBehavior.density = 500.0
+        brickBehavior.elasticity = 0.0
         brickBehavior.friction = 0.0
         brickBehavior.resistance = 0.0
         brickBehavior.angularResistance = 0.0

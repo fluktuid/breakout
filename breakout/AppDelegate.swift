@@ -18,15 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         static let Defaults = UserDefaults.standard
         struct Ball {
             static var Size: CGFloat {
-                get { return Defaults.object(forKey: "Ball.Size") as? CGFloat ?? 25.0 }
+                get { return Defaults.object(forKey: "Ball.Size") as? CGFloat ?? 20.0 }
                 set { Defaults.set(newValue, forKey: "Ball.Size") }
             }
-            static var StartSpreadAngle: CGFloat {
-                get { return Defaults.object(forKey: "Ball.StartSpreadAngle") as? CGFloat ?? CGFloat(M_PI/8) }
-                set { Defaults.set(newValue, forKey: "Ball.StartSpreadAngle") }
-            }
             static var CountOfBalls: Int {
-                get { return Defaults.object(forKey: "Ball.CountOfBalls") as? Int ?? 5 }
+                get { return Defaults.object(forKey: "Ball.CountOfBalls") as? Int ?? 1 }
                 set { Defaults.set(newValue, forKey: "Ball.CountOfBalls") }
             }
         }
@@ -38,6 +34,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             static var Columns: Int {
                 get { return Defaults.object(forKey: "Brick.Columns") as? Int ?? 5 }
                 set { Defaults.set(newValue, forKey: "Brick.Columns") }
+            }
+            static var HarderBricks: Bool {
+                get { return Defaults.object(forKey: "Brick.Harder") as? Bool ?? false}
+                set { Defaults.set(newValue, forKey: "Brick.Harder") }
             }
         }
         struct Game {

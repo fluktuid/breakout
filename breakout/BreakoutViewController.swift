@@ -89,9 +89,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
                                      y: breakoutView.bounds.maxY - Constants.Ball.BottomOffset - Constants.Ball.Size.height / 2)
         ballView = UIView(frame: CGRect(origin: ballViewOrigin, size: Constants.Ball.Size))
         ballView!.layer.backgroundColor = Constants.Ball.BackgroundColor.cgColor
-        ballView!.layer.borderColor = Constants.Ball.BorderColor.cgColor
-        ballView!.layer.borderWidth = Constants.Ball.BorderWidth
-        ballView!.layer.cornerRadius = Constants.Ball.Size.height / 2.0
+//        ballView!.layer.cornerRadius = ballView!.layer.frame.width/2
         ballView!.type = BreakoutViewType.ball
         breakoutGame.addView(ballView!)
         
@@ -99,9 +97,6 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
                                        y: breakoutView.bounds.maxY - Constants.Paddle.BottomOffset)
         paddleView = UIView(frame: CGRect(origin: paddleViewOrigin, size: Constants.Paddle.Size))
         paddleView!.layer.backgroundColor = Constants.Paddle.BackgroundColor.cgColor
-        paddleView!.layer.borderColor = Constants.Paddle.BorderColor.cgColor
-        paddleView!.layer.borderWidth = Constants.Paddle.BorderWidth
-        paddleView!.layer.cornerRadius = Constants.Paddle.Size.height / 2
         paddleView!.type = BreakoutViewType.paddle
         breakoutGame.addView(paddleView!)
         
@@ -116,10 +111,17 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
                 let brickViewOrigin = CGPoint(x: Constants.Brick.Gap + (brickViewSize.width + Constants.Brick.Gap) * CGFloat(column),
                                               y:  Constants.Brick.TopOffset + (brickViewSize.height + Constants.Brick.Gap) * CGFloat(row))
                 let brickView = UIView(frame: CGRect(origin: brickViewOrigin, size: brickViewSize))
-                brickView.layer.backgroundColor = Constants.Brick.BackgroundColor.cgColor
-                brickView.layer.borderColor = Constants.Brick.BorderColor.cgColor
-                brickView.layer.borderWidth = Constants.Brick.BorderWidth
-                brickView.layer.cornerRadius = Constants.Brick.Height / 4.0
+                
+                if(AppDelegate.Settings.Brick.HarderBricks) {
+                    let harder = Int(arc4random_uniform(3))
+                    if(harder == 1) {
+                        brickView.layer.backgroundColor = Constants.Brick.HarderBackgroundColor.cgColor
+                    } else {
+                        brickView.layer.backgroundColor = Constants.Brick.BackgroundColor.cgColor
+                    }
+                } else {
+                    brickView.layer.backgroundColor = Constants.Brick.BackgroundColor.cgColor
+                }
                 brickView.type = BreakoutViewType.brick
                 bricksColumn.insert(brickView, at: column)
                 breakoutGame.addView(brickView)
@@ -129,7 +131,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     func winGame() {
-        let alert = UIAlertController(title: "Victory :)", message: "No more bricks left to hit!", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Victory", message: "All Bricks are destroyed", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in
             self.startGame()
@@ -140,7 +142,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     func endGame() {
-        let alert = UIAlertController(title: "Game Over :(", message: "The ball fell through the bottom of the screen!", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Game Over", message: "you have lost", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in
             self.startGame()

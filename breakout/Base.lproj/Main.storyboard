@@ -89,7 +89,7 @@
                                                     <frame key="frameInset" minX="300" minY="8" width="94" height="29"/>
                                                     <color key="tintColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
-                                                        <action selector="brickRowsStepperValueChanged:" destination="2vE-80-LXS" eventType="valueChanged" id="DfU-z3-tnf"/>
+                                                        <action selector="brickRowsValueChanged:" destination="2vE-80-LXS" eventType="valueChanged" id="VYa-gT-doG"/>
                                                     </connections>
                                                 </stepper>
                                             </subviews>
@@ -125,7 +125,7 @@
                                                     <frame key="frameInset" minX="300" minY="3" width="94" height="29"/>
                                                     <color key="tintColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <connections>
-                                                        <action selector="brickColumnsStepperValueChanged:" destination="2vE-80-LXS" eventType="valueChanged" id="GjV-w8-nwV"/>
+                                                        <action selector="brickColumnsValueChanged:" destination="2vE-80-LXS" eventType="valueChanged" id="xoV-SS-pqR"/>
                                                     </connections>
                                                 </stepper>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NCe-VU-LmB">
@@ -145,12 +145,128 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="avB-jF-BQh">
+                                        <rect key="frame" x="0.0" y="207.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="avB-jF-BQh" id="1rH-qz-Aeg">
+                                            <frame key="frameInset" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I0T-uU-vt7">
+                                                    <frame key="frameInset" minX="350" minY="7" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <connections>
+                                                        <action selector="generateHarderBricks:" destination="2vE-80-LXS" eventType="valueChanged" id="O3k-FU-hNd"/>
+                                                    </connections>
+                                                </switch>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Harder Bricks" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mED-aR-mpZ">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="mED-aR-mpZ" firstAttribute="leading" secondItem="1rH-qz-Aeg" secondAttribute="leadingMargin" id="5ld-TE-KCG"/>
+                                                <constraint firstItem="I0T-uU-vt7" firstAttribute="trailing" secondItem="1rH-qz-Aeg" secondAttribute="trailingMargin" id="7SE-Lt-jCa"/>
+                                                <constraint firstItem="I0T-uU-vt7" firstAttribute="top" secondItem="1rH-qz-Aeg" secondAttribute="topMargin" constant="-2" id="9if-xe-0WU"/>
+                                                <constraint firstAttribute="centerY" secondItem="mED-aR-mpZ" secondAttribute="centerY" id="X8n-1s-jTe"/>
+                                                <constraint firstAttribute="centerY" secondItem="I0T-uU-vt7" secondAttribute="centerY" id="zHH-CI-ZAs"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="9if-xe-0WU"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Ball" id="oJh-wh-PYe">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="yMk-qr-htt">
+                                        <rect key="frame" x="0.0" y="299.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yMk-qr-htt" id="VbB-4J-NdP">
+                                            <frame key="frameInset" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Count" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TZb-hw-dJQ">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="3" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4sX-IS-Vlv">
+                                                    <frame key="frameInset" minX="280" minY="12" width="11" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" continuous="NO" autorepeat="NO" value="1" minimumValue="1" maximumValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="94u-z9-hgI">
+                                                    <frame key="frameInset" minX="300" minY="8" width="94" height="29"/>
+                                                    <color key="tintColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <connections>
+                                                        <action selector="ballCountValueChanged:" destination="2vE-80-LXS" eventType="valueChanged" id="k3d-OF-t80"/>
+                                                    </connections>
+                                                </stepper>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="TZb-hw-dJQ" firstAttribute="leading" secondItem="VbB-4J-NdP" secondAttribute="leadingMargin" id="41N-Rh-b6l"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="TZb-hw-dJQ" secondAttribute="trailing" constant="540" id="Cs2-bI-XuZ"/>
+                                                <constraint firstItem="94u-z9-hgI" firstAttribute="leading" secondItem="4sX-IS-Vlv" secondAttribute="trailing" constant="10" id="LhE-dH-bOT"/>
+                                                <constraint firstAttribute="centerY" secondItem="TZb-hw-dJQ" secondAttribute="centerY" id="Mjh-p4-2Py"/>
+                                                <constraint firstAttribute="centerY" secondItem="4sX-IS-Vlv" secondAttribute="centerY" id="PO9-26-21W"/>
+                                                <constraint firstItem="94u-z9-hgI" firstAttribute="trailing" secondItem="VbB-4J-NdP" secondAttribute="trailingMargin" id="XFl-U3-no5"/>
+                                                <constraint firstAttribute="centerY" secondItem="94u-z9-hgI" secondAttribute="centerY" id="e2k-pR-3pg"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="Cs2-bI-XuZ"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="X6y-RZ-wqj">
+                                        <rect key="frame" x="0.0" y="343.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="X6y-RZ-wqj" id="mmq-hW-5Ow">
+                                            <frame key="frameInset" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Size" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5BH-mr-5hW">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" continuous="NO" autorepeat="NO" value="5" minimumValue="1" maximumValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZSj-st-Pml">
+                                                    <frame key="frameInset" minX="300" minY="3" width="94" height="29"/>
+                                                    <color key="tintColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <connections>
+                                                        <action selector="ballSizeValueChanged:" destination="2vE-80-LXS" eventType="valueChanged" id="M4W-Tm-rDz"/>
+                                                    </connections>
+                                                </stepper>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CjK-gR-DuM">
+                                                    <frame key="frameInset" minX="280" minY="7" width="11" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="centerY" secondItem="CjK-gR-DuM" secondAttribute="centerY" id="74h-Bc-hPI"/>
+                                                <constraint firstItem="ZSj-st-Pml" firstAttribute="leading" secondItem="CjK-gR-DuM" secondAttribute="trailing" constant="10" id="HTw-Ox-pxK"/>
+                                                <constraint firstAttribute="centerY" secondItem="5BH-mr-5hW" secondAttribute="centerY" id="PZQ-jL-3fK"/>
+                                                <constraint firstItem="ZSj-st-Pml" firstAttribute="trailing" secondItem="mmq-hW-5Ow" secondAttribute="trailingMargin" id="V1n-wb-CFM"/>
+                                                <constraint firstItem="5BH-mr-5hW" firstAttribute="leading" secondItem="mmq-hW-5Ow" secondAttribute="leadingMargin" id="exh-RN-uP1"/>
+                                                <constraint firstAttribute="centerY" secondItem="ZSj-st-Pml" secondAttribute="centerY" id="xGS-g4-GiO"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="Game" id="sKM-4s-Wq4">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="JjO-3r-fTd">
-                                        <rect key="frame" x="0.0" y="255.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="435.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JjO-3r-fTd" id="Zwh-0B-oBx">
                                             <frame key="frameInset" width="375" height="43.5"/>
@@ -193,11 +309,16 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Settings" id="vdn-tZ-bqS"/>
                     <connections>
+                        <outlet property="ballCountStepper" destination="94u-z9-hgI" id="Re4-uy-ho2"/>
+                        <outlet property="ballCountStepperLabel" destination="4sX-IS-Vlv" id="vXr-YW-JiJ"/>
+                        <outlet property="ballSizeStepper" destination="ZSj-st-Pml" id="FdV-5f-364"/>
+                        <outlet property="ballSizeStepperLabel" destination="CjK-gR-DuM" id="zKQ-cn-5Cm"/>
                         <outlet property="brickColumnsStepper" destination="orQ-uU-yP0" id="agD-Uy-r3F"/>
                         <outlet property="brickColumnsStepperLabel" destination="NCe-VU-LmB" id="Wav-75-qsC"/>
                         <outlet property="brickRowsStepper" destination="ejw-vj-fHI" id="7Ns-gi-Ku7"/>
                         <outlet property="brickRowsStepperLabel" destination="GzF-7m-Blw" id="ZCw-Rb-J02"/>
                         <outlet property="gameContinueAfterGameOverSwitch" destination="kkA-2K-rXH" id="MM5-Ux-tRp"/>
+                        <outlet property="makeHarderBricksSwitch" destination="I0T-uU-vt7" id="wEQ-5K-XAH"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mPN-bJ-1VU" userLabel="First Responder" sceneMemberID="firstResponder"/>
