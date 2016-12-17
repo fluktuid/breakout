@@ -85,19 +85,6 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     
     var delegate: BreakoutGameDelegate? = nil
     
-    fileprivate struct Constants {
-        struct Ball {
-            static let MinVelocity = CGFloat(100.0)
-            static let MaxVelocity = CGFloat(700.0)
-        }
-        struct Boundary {
-            static let Top = "Top"
-            static let Left = "Left"
-            static let Right = "Right"
-            static let Bottom = "Bottom"
-        }
-    }
-    
     override init() {
         super.init()
         addChildBehavior(collider)
@@ -166,7 +153,20 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         dynamicAnimator?.addBehavior(viewPush)
     }
     
-    func removeView(_ view: UIView) {
+    
+    func removeView(_ view: UIView, animated: Bool = false) {
+        
+        if animated == true {
+            UIView.animate(withDuration: 0.5, animations: {
+                view.alpha = 1.0
+                view.alpha = 0.0
+                },
+                           completion: { (finished: Bool) -> Void in
+                            self.removeView(view, animated: false)
+            })
+            return
+        }
+        
         switch view.type {
         case .ball:
             ballBehavior.removeItem(view)
@@ -188,6 +188,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         collider.removeItem(view)
         view.removeFromSuperview()
     }
+    
     
     fileprivate var pausedBallVelocity: CGPoint?
     
@@ -216,7 +217,11 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             if brickAttachments.count == 1 {
                 delegate?.winGame()
             }
-            removeView(brickView!)
+            if(brickView!.backgroundColor == Constants.Brick.HarderBackgroundColor) {
+                brickView!.backgroundColor = Constants.Brick.BackgroundColor
+            } else {
+                removeView(brickView!, animated: true)
+            }
         }
     }
     
@@ -294,14 +299,14 @@ private extension CGPoint {
     }
 }
 
-prefix func -(left: CGPoint) -> CGPoint {
+prefix func - (left: CGPoint) -> CGPoint {
     return CGPoint(x: -left.x, y: -left.y)
 }
 
-func -(left: CGPoint, right: CGPoint) -> CGPoint {
-    return CGPoint(x: left.x-right.x, y: left.y-right.y)
+func - (left: CGPoint, right: CGPoint) -> CGPoint {
+    return CGPoint(x: left.x - right.x, y: left.y - right.y)
 }
 
-func *(left: CGFloat, right: CGPoint) -> CGPoint {
-    return CGPoint(x: left*right.x, y: left*right.y)
+func * (left: CGFloat, right: CGPoint) -> CGPoint {
+    return CGPoint(x: left * right.x, y: left * right.y)
 }

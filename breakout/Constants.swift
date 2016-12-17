@@ -13,6 +13,11 @@ public struct Constants {
         static var StartSpreadAngle: CGFloat = 0.523599 // ca. pi/6
         static let BackgroundColor = UIColor.cyan
         static let BottomOffset = CGFloat(40.0)
+        
+        
+        //für BreakoutBehavior
+        static let MinVelocity = CGFloat(100.0)
+        static let MaxVelocity = CGFloat(700.0)
     }
     struct Paddle {
         static let Size = CGSize(width: 100.0, height: 10.0)
@@ -28,6 +33,12 @@ public struct Constants {
         static let BackgroundColor = UIColor.magenta
         static let HarderBackgroundColor = UIColor.gray
         static let TopOffset = CGFloat(100.0)
+    }
+    struct Boundary {
+        static let Top = "Top"
+        static let Left = "Left"
+        static let Right = "Right"
+        static let Bottom = "Bottom"
     }
     
     private let colors: Dictionary<Int,UIColor> = [
