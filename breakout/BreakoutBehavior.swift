@@ -20,6 +20,8 @@ public protocol BreakoutGameDelegate {
     func winGame() -> Void
     func endGame() -> Void
     func updateCurrentBadge() -> Void
+    func removeBall() -> Void
+    func getBallCount() -> Int
 }
 
 public extension UIView {
@@ -49,7 +51,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         ballBehavior.density = 1.0
         ballBehavior.elasticity = 2.2
         ballBehavior.friction = 5.0
-        ballBehavior.resistance = -1.0
+        ballBehavior.resistance = 0.0
         ballBehavior.angularResistance = 0.0
         return ballBehavior
     }()
@@ -164,7 +166,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         if animated == true {
             UIView.animate(withDuration: 0.5, animations: {
                 view.alpha = 1.0
-                view.alpha = 0.0
+                view.alpha = 0.5
                 },
                            completion: { (finished: Bool) -> Void in
                             self.removeView(view, animated: false)
@@ -247,7 +249,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     }
     
     func collisionBehavior(_ behavior: UICollisionBehavior, beganContactFor item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, at p: CGPoint) {
-        let (ballView, _, _) = collisionViewsForItems([item])
+        var (ballView, _, _) = collisionViewsForItems([item])
         if ballView != nil {
             ballBehavior.limitLinearVelocity(min: Constants.Ball.MinVelocity, max: Constants.Ball.MaxVelocity, forItem: ballView!)
         }
@@ -255,13 +257,18 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             switch boundaryName {
             case Constants.Boundary.Bottom:
                 if ballView != nil {
-                    delegate?.endGame()
+                    delegate?.removeBall()
+                    if(delegate?.getBallCount())! <= 0 {
+                        delegate?.endGame()
+                    }
+ //                   ballView?.removeFromSuperview()
                 }
             default:
                 break
             }
         }
     }
+    
     
     fileprivate func collisionViewsForItems(_ items: [UIDynamicItem]) -> (ballView: UIView?, paddleView: UIView?, brickView: UIView?) {
         var ballView: UIView? = nil

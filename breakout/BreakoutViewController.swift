@@ -18,16 +18,18 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         return lazyBreakoutGame
     }()
     
+    public var ballCount:Int = AppDelegate.Settings.Ball.CountOfBalls
+    
     lazy var breakoutAnimator: UIDynamicAnimator = {
         let lazyBreakoutAnimator = UIDynamicAnimator(referenceView: self.breakoutView)
         return lazyBreakoutAnimator
     }()
     
-    fileprivate var ballView: UIView? = nil
+    private var ballView: UIView? = nil
     
-    fileprivate var paddleView: UIView? = nil
+    private var paddleView: UIView? = nil
     
-    fileprivate var brickViews: [[UIView]] = [[]]
+    private var brickViews: [[UIView]] = [[]]
     
     // MARK: - View controller lifecycle
     override func viewDidLoad() {
@@ -75,9 +77,21 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         }
     }
     
-    // MARK: - Breakout game
+    func createBall() {
+        let ballViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Ball.Size.width / 2,
+                                     y: breakoutView.bounds.maxY - Constants.Ball.BottomOffset - Constants.Ball.Size.height / 2)
+        ballView = UIView(frame: CGRect(origin: ballViewOrigin, size: Constants.Ball.Size))
+        ballView!.layer.backgroundColor = Constants.Ball.BackgroundColor.cgColor
+        ballView!.layer.cornerRadius = ballView!.layer.frame.width/2
+        ballView!.type = BreakoutViewType.ball
+        breakoutGame.addView(ballView!)
+    }
+    
+    
+    //Breakout game
     
     func startGame() {
+        ballCount = AppDelegate.Settings.Ball.CountOfBalls
         AppDelegate.Score.current.points = 0
         
         for view in breakoutView.subviews {
@@ -87,13 +101,9 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         breakoutView.type = BreakoutViewType.boundary
         breakoutGame.createBoundary(breakoutView)
         
-        let ballViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Ball.Size.width / 2,
-                                     y: breakoutView.bounds.maxY - Constants.Ball.BottomOffset - Constants.Ball.Size.height / 2)
-        ballView = UIView(frame: CGRect(origin: ballViewOrigin, size: Constants.Ball.Size))
-        ballView!.layer.backgroundColor = Constants.Ball.BackgroundColor.cgColor
-//        ballView!.layer.cornerRadius = ballView!.layer.frame.width/2
-        ballView!.type = BreakoutViewType.ball
-        breakoutGame.addView(ballView!)
+        for _ in 0..<AppDelegate.Settings.Ball.CountOfBalls {
+            createBall()
+        }
         
         let paddleViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Paddle.Size.width / 2,
                                        y: breakoutView.bounds.maxY - Constants.Paddle.BottomOffset)
@@ -167,4 +177,10 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         present(alert, animated: true, completion: nil)
     }
     
+    public func getBallCount() -> Int {
+        return ballCount
+    }
+    public func removeBall() {
+        ballCount = ballCount - 1
+    }
 }
