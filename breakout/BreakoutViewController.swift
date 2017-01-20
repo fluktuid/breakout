@@ -126,7 +126,9 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
                 
                 if(AppDelegate.Settings.Brick.HarderBricks) {
                     let harder = Int(arc4random_uniform(3))
-                    if(harder == 1) {
+                    if (harder == 2) {
+                        brickView.layer.backgroundColor = Constants.Brick.HardestBackgroundColor.cgColor
+                    } else if(harder == 1) {
                         brickView.layer.backgroundColor = Constants.Brick.HarderBackgroundColor.cgColor
                     } else {
                         brickView.layer.backgroundColor = Constants.Brick.BackgroundColor.cgColor

@@ -32,6 +32,7 @@ public struct Constants {
         static let Height = CGFloat(30.0)
         static let BackgroundColor = UIColor.magenta
         static let HarderBackgroundColor = UIColor.gray
+        static let HardestBackgroundColor = UIColor.blue
         static let TopOffset = CGFloat(100.0)
     }
     struct Boundary {

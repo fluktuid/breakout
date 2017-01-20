@@ -224,7 +224,9 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             if brickAttachments.count == 1 {
                 delegate?.winGame()
             }
-            if(brickView!.backgroundColor == Constants.Brick.HarderBackgroundColor) {
+            if brickView!.backgroundColor == Constants.Brick.HardestBackgroundColor {
+                changeBrickColor(brickView!, toColor: Constants.Brick.HarderBackgroundColor)
+            } else if brickView!.backgroundColor == Constants.Brick.HarderBackgroundColor {
                 changeBrickColor(brickView!,toColor: Constants.Brick.BackgroundColor)
             } else {
                 removeView(brickView!, animated: true)
