@@ -109,6 +109,22 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
                                        y: breakoutView.bounds.maxY - Constants.Paddle.BottomOffset)
         paddleView = UIView(frame: CGRect(origin: paddleViewOrigin, size: Constants.Paddle.Size))
         paddleView!.layer.backgroundColor = Constants.Paddle.BackgroundColor.cgColor
+        
+        
+        //ultra hard layer!
+        /*
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = paddleView!.bounds
+        maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 10, y: 0, width: 10, height: 10)).cgPath
+        paddleView!.layer.mask = maskLayer
+        */
+        
+        //normal layer
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = paddleView!.bounds
+        maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 100, height: 10)).cgPath
+        paddleView!.layer.mask = maskLayer
+        
         paddleView!.type = BreakoutViewType.paddle
         breakoutGame.addView(paddleView!)
         
