@@ -84,6 +84,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         ballView!.layer.backgroundColor = Constants.Ball.BackgroundColor.cgColor
         ballView!.layer.cornerRadius = ballView!.layer.frame.width/2
         ballView!.type = BreakoutViewType.ball
+        ballView!.clipsToBounds=true
         breakoutGame.addView(ballView!)
     }
     
@@ -105,27 +106,32 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             createBall()
         }
         
-        let paddleViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Paddle.Size.width / 2,
-                                       y: breakoutView.bounds.maxY - Constants.Paddle.BottomOffset)
+        let paddleViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Paddle.Size.width / 2, y: breakoutView.bounds.maxY - Constants.Paddle.BottomOffset)
+        
         paddleView = UIView(frame: CGRect(origin: paddleViewOrigin, size: Constants.Paddle.Size))
+        
         paddleView!.layer.backgroundColor = Constants.Paddle.BackgroundColor.cgColor
         
         
         //ultra hard layer!
-        /*
+   /*
         let maskLayer = CAShapeLayer()
         maskLayer.frame = paddleView!.bounds
         maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 10, y: 0, width: 10, height: 10)).cgPath
         paddleView!.layer.mask = maskLayer
-        */
+ */
         
         //normal layer
+      /*
         let maskLayer = CAShapeLayer()
         maskLayer.frame = paddleView!.bounds
         maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 100, height: 10)).cgPath
         paddleView!.layer.mask = maskLayer
+ */
         
+        paddleView!.layer.cornerRadius = min(paddleView!.frame.size.height, paddleView!.frame.size.width) / 2.0
         paddleView!.type = BreakoutViewType.paddle
+        paddleView!.clipsToBounds = true
         breakoutGame.addView(paddleView!)
         
         let brickViewSize = CGSize(width: (breakoutView.bounds.width - Constants.Brick.Gap * CGFloat(Constants.Brick.Columns + 1))

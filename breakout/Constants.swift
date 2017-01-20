@@ -20,7 +20,7 @@ public struct Constants {
         static let MaxVelocity = CGFloat(700.0)
     }
     struct Paddle {
-        static let Size = CGSize(width: 100.0, height: 10.0)
+        static let Size = CGSize(width: 100.0, height: -10.0)
         static let BackgroundColor = UIColor.gray
         static let BottomOffset = CGFloat(15.0)
     }

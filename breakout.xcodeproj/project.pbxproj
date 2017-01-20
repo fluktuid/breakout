@@ -13,6 +13,7 @@
 		8E32979D1DFEBEB90021B5D8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E32979B1DFEBEB90021B5D8 /* Main.storyboard */; };
 		8E32979F1DFEBEB90021B5D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E32979E1DFEBEB90021B5D8 /* Assets.xcassets */; };
 		8E3297A21DFEBEB90021B5D8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E3297A01DFEBEB90021B5D8 /* LaunchScreen.storyboard */; };
+		8E8F85531E32838C00B4ADE6 /* PaddleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8F85521E32838C00B4ADE6 /* PaddleView.swift */; };
 		8EE739421E0566CD00720FB1 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE739411E0566CD00720FB1 /* TableViewController.swift */; };
 		8EE739441E05672B00720FB1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE739431E05672B00720FB1 /* AppDelegate.swift */; };
 		8EE739461E05713100720FB1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE739451E05713100720FB1 /* Constants.swift */; };
@@ -46,6 +47,7 @@
 		8E3297A31DFEBEB90021B5D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8E3297A81DFEBEBA0021B5D8 /* breakoutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = breakoutTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E3297B31DFEBEBA0021B5D8 /* breakoutUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = breakoutUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E8F85521E32838C00B4ADE6 /* PaddleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddleView.swift; sourceTree = "<group>"; };
 		8EE739411E0566CD00720FB1 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		8EE739431E05672B00720FB1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8EE739451E05713100720FB1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				8E3297991DFEBEB90021B5D8 /* BreakoutViewController.swift */,
+				8E8F85521E32838C00B4ADE6 /* PaddleView.swift */,
 				8E32979B1DFEBEB90021B5D8 /* Main.storyboard */,
 				8E32979E1DFEBEB90021B5D8 /* Assets.xcassets */,
 				8E3297A01DFEBEB90021B5D8 /* LaunchScreen.storyboard */,
@@ -249,6 +252,7 @@
 				8EE739421E0566CD00720FB1 /* TableViewController.swift in Sources */,
 				8E1471FD1E049A0C006C1F5B /* Ball.swift in Sources */,
 				8EE739461E05713100720FB1 /* Constants.swift in Sources */,
+				8E8F85531E32838C00B4ADE6 /* PaddleView.swift in Sources */,
 				8E1471F71E04999C006C1F5B /* BreakoutBehavior.swift in Sources */,
 				8EE739441E05672B00720FB1 /* AppDelegate.swift in Sources */,
 			);

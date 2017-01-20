@@ -60,12 +60,13 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         let paddleBehavior = UIDynamicItemBehavior()
         
         //setzt die Einstellungen für alles
-        paddleBehavior.allowsRotation = false
-        paddleBehavior.density = 2000.0
-        paddleBehavior.elasticity = 0.0
-        paddleBehavior.friction = 0.0
-        paddleBehavior.resistance = 0.0
-        paddleBehavior.angularResistance = 0.0
+        paddleBehavior.allowsRotation = true
+        paddleBehavior.charge = 0
+        paddleBehavior.density = 20000.0
+        paddleBehavior.elasticity = 8.5
+        paddleBehavior.friction = 20.0
+        paddleBehavior.resistance = 30.0
+        paddleBehavior.angularResistance = 5.0
         return paddleBehavior
     }()
     
@@ -247,6 +248,9 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         }
         if ballView != nil && paddleView != nil {
             ballBehavior.addLinearVelocity(CGPoint(x: 0.0, y: 10.0), for: ballView!)
+            let radians = atan2f(Float(ballView!.transform.b), Float(ballView!.transform.a))
+            let degrees = radians * Float((180 / M_PI))
+            print(degrees)
         }
     }
     
