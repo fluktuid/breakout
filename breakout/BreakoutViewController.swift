@@ -167,7 +167,8 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     func winGame() {
-        breakoutGame.pauseGame()
+        addToHighscore()
+//        breakoutGame.pauseGame()
         
         let alert = UIAlertController(title: "Victory", message: "You scored \(AppDelegate.Score.current.points + 1) points", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
@@ -183,7 +184,41 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         tabBarController?.tabBar.items![0].badgeValue = String(AppDelegate.Score.current.points)
     }
     
+    func addToHighscore() {
+        let points = breakoutGame.calculatePoints()
+        
+        let current = Int64(NSDate().timeIntervalSince1970)
+        let z = current - AppDelegate.Score.current.starttime //playtime
+        let w = AppDelegate.Score.current.maxHardnessOfBlocks                               //max hardness
+
+        
+        var best:[PointResult]? = AppDelegate.Score.best
+        if( best == nil) {
+            best = []
+            best!.append(PointResult(timestamp: current, countOfBlocks: AppDelegate.Score.current.destroyedBlocks, playtime: z, maxHardnessOfBricks: w, points: points))
+        } else {
+            //add
+            best!.append(PointResult(timestamp: current, countOfBlocks: AppDelegate.Score.current.destroyedBlocks, playtime: z, maxHardnessOfBricks: w, points: points))
+            
+            
+            //remove lowest points
+            var lowest = best![0];
+            var indexOfLowest = 0;
+            for index in 1 ..< best!.count {
+                if(lowest.points > best![index].points) {
+                    lowest = best![index]
+                    indexOfLowest = index
+                }
+            }
+            best!.remove(at: indexOfLowest)
+        }
+        
+
+        AppDelegate.Score.best = best
+    }
+    
     func endGame() {
+        breakoutGame.pauseGame()
         let alert = UIAlertController(title: "Game Over", message: "you have lost", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in
@@ -197,7 +232,6 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             }
             alert.addAction(continueAction)
         }
-        breakoutGame.pauseGame()
         present(alert, animated: true, completion: nil)
     }
     

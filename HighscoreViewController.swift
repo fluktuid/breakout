@@ -99,7 +99,7 @@ class HighscoreViewController: UITableViewController {
             }
         } else {
             cell.textLabel?.text = ""
-            cell.detailTextLabel = ""
+            cell.detailTextLabel?.text = ""
         }
         
         return cell

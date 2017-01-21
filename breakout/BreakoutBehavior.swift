@@ -232,13 +232,20 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             } else {
                 removeView(brickView!, animated: true)
             }
-            addPoint()
+            calculatePoints()
         }
     }
     
-    func addPoint() {
-        AppDelegate.Score.current.points = AppDelegate.Score.current.points + 1
+    func calculatePoints() -> Int{
+        let b = AppDelegate.Score.current.remainingBlocks                                   //count of blocks still in game
+        let z = Int64(NSDate().timeIntervalSince1970) - AppDelegate.Score.current.starttime //playtime
+        let w = AppDelegate.Score.current.maxHardnessOfBlocks                               //max hardness
+        let p = Int64(b * w * 1000) / (z + 30)
+        
+        
+        AppDelegate.Score.current.points = Int(p)
         delegate?.updateCurrentBadge()
+        return Int(p)
     }
     
     func collisionBehavior(_ behavior: UICollisionBehavior, endedContactFor item1: UIDynamicItem, with item2: UIDynamicItem) {

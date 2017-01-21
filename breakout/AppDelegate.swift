@@ -54,6 +54,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 get { return Defaults.object(forKey: "current.points") as? Int ?? 0 }
                 set { Defaults.set(newValue, forKey: "current.points") }
             }
+            static var starttime: Int64 {
+                get { return Defaults.object(forKey: "current.starttime") as? Int64 ?? 0 }
+                set { Defaults.set(newValue, forKey: "current.starttime") }
+            }
+            static var maxHardnessOfBlocks: Int {
+                get { return Defaults.object(forKey: "current.maxHardnessOfBlocks") as? Int ?? 0 }
+                set { Defaults.set(newValue, forKey: "current.maxHardnessOfBlocks") }
+            }
+            static var remainingBlocks: Int {
+                get { return Defaults.object(forKey: "current.remainingBlocks") as? Int ?? 0 }
+                set { Defaults.set(newValue, forKey: "current.remainingBlocks") }
+            }
+            static var destroyedBlocks: Int {
+                get { return Defaults.object(forKey: "current.destroyedBlocks") as? Int ?? 0 }
+                set { Defaults.set(newValue, forKey: "current.destroyedBlocks") }
+            }
         }
         
         //CheckForNil
