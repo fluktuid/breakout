@@ -202,15 +202,17 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             
             
             //remove lowest points
-            var lowest = best![0];
-            var indexOfLowest = 0;
-            for index in 1 ..< best!.count {
-                if(lowest.points > best![index].points) {
-                    lowest = best![index]
-                    indexOfLowest = index
+            if(best!.count > 1) {
+                var lowest = best![0];
+                var indexOfLowest = 0;
+                for index in 1 ..< best!.count {
+                    if(lowest.points > best![index].points) {
+                        lowest = best![index]
+                        indexOfLowest = index
+                    }
                 }
+                best!.remove(at: indexOfLowest)
             }
-            best!.remove(at: indexOfLowest)
         }
         
 

@@ -75,11 +75,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //CheckForNil
         static var best:[PointResult]? {
             get {
-                let best = Defaults.object(forKey: "score.best") as? [PointResult]
+                let best = Defaults.object(forKey: "score.best") as? [PointResult] ?? [PointResult]()
                 return best
             }
             set {
                 Defaults.set(newValue, forKey: "score.best")
+                Defaults.synchronize()
             }
         }
     }

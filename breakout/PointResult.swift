@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PointResult: NSObject {
+class PointResult: NSObject,NSCoding {
     let timestamp:Int64
     let countOfBlocks:Int
     let playtime:Int64
@@ -30,4 +30,5 @@ class PointResult: NSObject {
         self.maxHardnessOfBricks = maxHardnessOfBricks
         self.points = points
     }
+
 }
