@@ -55,13 +55,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 set { Defaults.set(newValue, forKey: "current.points") }
             }
         }
-        struct best {
-            static var points: Int {
-                get { return Defaults.object(forKey: "current.points") as? Int ?? 0 }
-                set { Defaults.set(newValue, forKey: "current.points") }
+        
+        //CheckForNil
+        static var best:[PointResult]? {
+            get {
+                let best = Defaults.object(forKey: "score.best") as? [PointResult]
+                return best
+            }
+            set {
+                Defaults.set(newValue, forKey: "score.best")
             }
         }
     }
+    
+    
+    
+    /*
+    func savePlaces(){
+        let placesArray = [Place(lat: 123, lng: 123, name: "hi")]
+        let placesData = NSKeyedArchiver.archivedDataWithRootObject(placesArray)
+        UserDefaults.standardUserDefaults().setObject(placesData, forKey: "places")
+    }
+    
+    func loadPlaces(){
+        let placesData = UserDefaults.standard.object(forKey: "places") as? NSData
+        
+        if let placesData = placesData {
+            let placesArray = NSKeyedUnarchiver.unarchiveObjectWithData(placesData) as? [Place]
+            
+            if let placesArray = placesArray {
+                // do something…
+            }
+            
+        }
+    }
+*/
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
