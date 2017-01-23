@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class SettingsTableViewController: UITableViewController {
     
@@ -32,37 +31,9 @@ class SettingsTableViewController: UITableViewController {
     }
     
     
-    var test: [NSManagedObject] = []
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        
-        
-        super.viewWillAppear(animated)
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Test")
-        print(test)
-        do {
-            test = try managedContext.fetch(fetchRequest)
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-        print(test.count)
-        print(test[0].value(forKey: "title"))
-        
-        
-        
-        
-        
-        
-        
+
         brickRowsStepper.value = Double(AppDelegate.Settings.Brick.Rows)
         brickRowsStepperLabel.text = "\(AppDelegate.Settings.Brick.Rows)"
         brickColumnsStepper.value = Double(AppDelegate.Settings.Brick.Columns)

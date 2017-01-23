@@ -11,16 +11,38 @@ import CoreData
 
 class HighscoreViewController: UITableViewController {
     
-    
-    var highscore:[PointResult]?
+    var highscore: [NSManagedObject] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      //  highscore = AppDelegate.Score.best
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Highscore")
+        let sortDescriptor = NSSortDescriptor(key: "points", ascending: false)
+        let sortDescriptors = [sortDescriptor]
+        fetchRequest.sortDescriptors = sortDescriptors
+        fetchRequest.returnsObjectsAsFaults = false
+        
         print(highscore)
-
-        // Do any additional setup after loading the view.
+        do {
+            highscore = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        print(highscore.count)
+        if highscore.count>0 {
+            print(highscore[0].value(forKey: "countOfBlocks"))
+            print(highscore[0].value(forKey: "maxHardnessOfBricks"))
+            print(highscore[0].value(forKey: "playtime"))
+            print(highscore[0].value(forKey: "points"))
+            print(highscore[0].value(forKey: "timestamp"))
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,36 +95,35 @@ class HighscoreViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier:"ScoreCell", for: indexPath)
         
-        if highscore != nil {
-            let score = highscore![indexPath.row]
+        
+        if highscore.count>indexPath.row {
+            let score = highscore[indexPath.row]
             
             
-            
-            switch indexPath.row {
-                case 0:
-                    cell.textLabel?.text = "Timestamp"
-                    cell.detailTextLabel?.text = "\(score.timestamp)"
-                case 1:
-                    cell.textLabel?.text = "Count of Blocks"
-                    cell.detailTextLabel?.text = "\(score.countOfBlocks)"
+        switch indexPath.row {
+            case 0:
+                cell.textLabel?.text = "Timestamp"
+                cell.detailTextLabel?.text = "\(score.value(forKey: "timestamp"))"
+            case 1:
+                cell.textLabel?.text = "Count of Blocks"
+                cell.detailTextLabel?.text = "\(score.value(forKey: "countOfBlocks"))"
                 case 2:
-                    cell.textLabel?.text = "Duration"
-                    cell.detailTextLabel?.text = "\(score.playtime)"
-                case 3:
-                    cell.textLabel?.text = "Max Hardness of blocks"
-                    cell.detailTextLabel?.text = "\(score.maxHardnessOfBricks)"
-                case 4:
-                    cell.textLabel?.text = "Points"
-                    cell.detailTextLabel?.text = "\(score.points)"
-                default:
-                    cell.textLabel?.text = ""
-                    cell.detailTextLabel?.text = ""
+                cell.textLabel?.text = "Duration"
+                cell.detailTextLabel?.text = "\(score.value(forKey: "playtime"))"
+            case 3:
+                cell.textLabel?.text = "Max Hardness of blocks"
+                cell.detailTextLabel?.text = "\(score.value(forKey: "maxHardnessOfBricks"))"
+            case 4:
+                cell.textLabel?.text = "Points"
+                cell.detailTextLabel?.text = "\(score.value(forKey: "points"))"
+            default:
+                cell.textLabel?.text = ""
+                cell.detailTextLabel?.text = ""
             }
         } else {
             cell.textLabel?.text = ""
             cell.detailTextLabel?.text = ""
         }
-        
         return cell
     }
     

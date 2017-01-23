@@ -55,8 +55,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 get { return Defaults.object(forKey: "current.points") as? Int ?? 0 }
                 set { Defaults.set(newValue, forKey: "current.points") }
             }
-            static var starttime: Int64 {
-                get { return Defaults.object(forKey: "current.starttime") as? Int64 ?? 0 }
+            static var starttime: TimeInterval {
+                get { return Defaults.object(forKey: "current.starttime") as? TimeInterval ?? 0 }
                 set { Defaults.set(newValue, forKey: "current.starttime") }
             }
             static var maxHardnessOfBlocks: Int {

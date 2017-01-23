@@ -241,10 +241,13 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     }
     
     func calculatePoints() -> Int{
-        let b = AppDelegate.Score.current.remainingBlocks                                   //count of blocks still in game
-        let z = Int64(NSDate().timeIntervalSince1970) - AppDelegate.Score.current.starttime //playtime
-        let w = AppDelegate.Score.current.maxHardnessOfBlocks                               //max hardness
-        let p = Int64(b * w * 1000) / (z + 30)
+        let b = AppDelegate.Score.current.remainingBlocks+AppDelegate.Score.current.destroyedBlocks     //count of blocks destroyed
+        let current = NSDate().timeIntervalSince1970
+        let z = current - AppDelegate.Score.current.starttime //playtime
+        let zInInt = Int(z)
+        print(zInInt)
+        let w = AppDelegate.Score.current.maxHardnessOfBlocks //max hardness
+        let p = (b * w * 1000) / (zInInt + 30)
         
         
         AppDelegate.Score.current.points = Int(p)

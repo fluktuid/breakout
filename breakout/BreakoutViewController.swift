@@ -95,11 +95,16 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     //Breakout game
     
     func startGame() {
+        if AppDelegate.Settings.Brick.HarderBricks {
+            AppDelegate.Score.current.maxHardnessOfBlocks = 3
+        } else {
+            AppDelegate.Score.current.maxHardnessOfBlocks = 1
+        }
         ballCount = AppDelegate.Settings.Ball.CountOfBalls
         AppDelegate.Score.current.points = 0
         AppDelegate.Score.current.remainingBlocks = AppDelegate.Settings.Brick.Columns * AppDelegate.Settings.Brick.Rows
         AppDelegate.Score.current.destroyedBlocks = 0
-   //     AppDelegate.Score.current.starttime = Int64(NSDate().timeIntervalSince1970)
+        AppDelegate.Score.current.starttime = NSDate().timeIntervalSince1970
         
         for view in breakoutView.subviews {
             breakoutGame.removeView(view)
@@ -173,7 +178,6 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     func winGame() {
-        addHighscore()
         addToHighscore()
 //        breakoutGame.pauseGame()
         
@@ -195,13 +199,18 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         let points = breakoutGame.calculatePoints()
         
         let current = NSDate().timeIntervalSince1970
- //       let z = (NSNumber(value: current) as! Decimal) - (NSNumber(value: AppDelegate.Score.current.starttime) as! Decimal)  //playtime
+        let z = current - AppDelegate.Score.current.starttime  //playtime
         let w = AppDelegate.Score.current.maxHardnessOfBlocks                      //max hardness
 
         
         var best:[PointResult]? = loadPointResultArray()
         //TODO: currentBlocks!
-        DataHelper().saveHighscore(timestamp: NSNumber(value: current), countOfBlocks: NSNumber(value: 0), playtime: NSNumber(value: 0), maxHardnessOfBricks: NSNumber(value: w), points: NSNumber(value: points))
+        //TODO: playtime
+        addHighscore(points: NSNumber(value: points),
+                     maxHardnessOfBricks: NSNumber(value: w),
+                     playtime: NSNumber(value: z),
+                     countOfBlocks: NSNumber(value: (AppDelegate.Score.current.destroyedBlocks + AppDelegate.Score.current.remainingBlocks)),
+                     timestamp: NSNumber(value: current))
     }
     
     //todo: in model?
@@ -252,21 +261,24 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     
-    func addHighscore() {
+    func addHighscore(points: NSNumber, maxHardnessOfBricks: NSNumber, playtime: NSNumber, countOfBlocks: NSNumber, timestamp:NSNumber) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
         
         let managedContext = appDelegate.persistentContainer.viewContext
         
-        let entity = NSEntityDescription.entity(forEntityName: "Test",
+        let entity = NSEntityDescription.entity(forEntityName: "Highscore",
                                                 in: managedContext)!
         
         let test = NSManagedObject(entity: entity,
                                      insertInto: managedContext)
         
-        test.setValue("title", forKeyPath: "title")
-        test.setValue("itemTitle", forKeyPath: "itemTitle")
+        test.setValue(points, forKeyPath: "points")
+        test.setValue(maxHardnessOfBricks, forKeyPath: "maxHardnessOfBricks")
+        test.setValue(playtime, forKeyPath: "playtime")
+        test.setValue(countOfBlocks, forKeyPath: "countOfBlocks")
+        test.setValue(timestamp, forKeyPath: "timestamp")
         
         do {
             try managedContext.save()
