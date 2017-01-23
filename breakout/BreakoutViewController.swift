@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     
     @IBOutlet weak var breakoutView: UIView!
+    
+    var highscores: [NSManagedObject] = []
     
     lazy var breakoutGame: BreakoutGameBehavior = {
         let lazyBreakoutGame = BreakoutGameBehavior()
@@ -170,6 +173,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     func winGame() {
+        addHighscore()
         addToHighscore()
 //        breakoutGame.pauseGame()
         
@@ -197,19 +201,19 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         
         var best:[PointResult]? = loadPointResultArray()
         //TODO: currentBlocks!
-  //      DataHelper().saveHighscore(timestamp: NSNumber(value: current), countOfBlocks: NSNumber(value: 0), playtime: NSNumber(value: 0), maxHardnessOfBricks: NSNumber(value: w), points: NSNumber(value: points))
+        DataHelper().saveHighscore(timestamp: NSNumber(value: current), countOfBlocks: NSNumber(value: 0), playtime: NSNumber(value: 0), maxHardnessOfBricks: NSNumber(value: w), points: NSNumber(value: points))
     }
     
     //todo: in model?
     func loadPointResultArray() -> [PointResult] {
-  //      let pointResultArray = DataHelper().fetchHighscores()
+        var pointResultArray = DataHelper().fetchHighscores()
         let points = AppDelegate.Score.points
         let timestamps = AppDelegate.Score.timestamps
         let countsOfBlocks = AppDelegate.Score.countsOfBlocks
         let playtimes = AppDelegate.Score.playtimes
         let maxHardnessesOfBricks = AppDelegate.Score.maxHardnessesOfBricks
         
-        var pointResultArray = [PointResult]()
+       // var pointResultArray = [PointResult]()
         
         for index in 0 ..< points.count {
             let loadedPointResult = PointResult(timestamp: timestamps[index],
@@ -225,7 +229,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     
     //todo: in model?
     func storePointResultArray(array: [PointResult]) {
-   //     DataHelper().fetchHighscores()
+        DataHelper().fetchHighscores()
         var points:[Int] = [Int]()
         var timestamps:[Int64] = [Int64]()
         var countsOfBlocks:[Int] = [Int]()
@@ -246,6 +250,32 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         AppDelegate.Score.playtimes = playtimes
         AppDelegate.Score.maxHardnessesOfBricks = maxHardnessesOfBricks
     }
+    
+    
+    func addHighscore() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Test",
+                                                in: managedContext)!
+        
+        let test = NSManagedObject(entity: entity,
+                                     insertInto: managedContext)
+        
+        test.setValue("title", forKeyPath: "title")
+        test.setValue("itemTitle", forKeyPath: "itemTitle")
+        
+        do {
+            try managedContext.save()
+            highscores.append(test)
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
     
     func endGame() {
         breakoutGame.pauseGame()

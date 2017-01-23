@@ -12,11 +12,12 @@ import CoreData
 class DataHelper {
 
     func fetchHighscores() -> [PointResult] {
+        /*
         let appDel:AppDelegate = (UIApplication.shared.delegate as! AppDelegate)
         let context:NSManagedObjectContext = appDel.managedObjectContext
         
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "LogItem")
-  //      request.returnsObjectsAsFaults = false
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Highscore")
+        request.returnsObjectsAsFaults = false
 //        let sortDescriptor = NSSortDescriptor(key: "prozent", ascending: false)
 //        let sortDescriptors = [sortDescriptor]
 //        request.sortDescriptors = sortDescriptors
@@ -44,7 +45,7 @@ class DataHelper {
         
         
         
-        /*
+        
         do{
             let highscores = try context.fetch(request) as NSArray
             
@@ -62,6 +63,7 @@ class DataHelper {
                     position += 1
                     let points = highscores.value(forKey: "points") as? String
                     
+                    print(Mirror(reflecting: highscores.value(forKey: "points")))
                     print(Mirror(reflecting: points),points)
                     let playtime = highscores.value(forKey: "playtime") as? String
                     let timestamp = highscores.value(forKey: "timestamp") as? String
@@ -86,13 +88,15 @@ class DataHelper {
         }catch{
             print("error?")
         }
-        */
+        
         return array
+ */
+        return [PointResult]()
     }
  
     func saveHighscore(timestamp: NSNumber,countOfBlocks:NSNumber,playtime:NSNumber,maxHardnessOfBricks:NSNumber,points:NSNumber) {
         
-        
+        /*
         let appDel:AppDelegate = (UIApplication.shared.delegate as! AppDelegate)
         let moc = appDel.managedObjectContext
         let entity = NSEntityDescription.entity(forEntityName: "Highscore", in: moc)
@@ -123,7 +127,7 @@ class DataHelper {
         } catch {
             fatalError("Failure to save context: \(error)")
         }
- 
+ */
     }
 
 }
