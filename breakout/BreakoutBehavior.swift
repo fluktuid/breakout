@@ -165,7 +165,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     func removeView(_ view: UIView, animated: Bool = false) {
         
         if animated == true {
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: 0.2, animations: {
                 view.alpha = 1.0
                 view.alpha = 0.5
                 },
@@ -227,12 +227,16 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             }
             if brickView!.backgroundColor == Constants.Brick.HardestBackgroundColor {
                 changeBrickColor(brickView!, toColor: Constants.Brick.HarderBackgroundColor)
+                calculateBlocks(blocksHit: 1)
             } else if brickView!.backgroundColor == Constants.Brick.HarderBackgroundColor {
                 changeBrickColor(brickView!,toColor: Constants.Brick.BackgroundColor)
+                calculateBlocks(blocksHit: 1)
             } else {
                 removeView(brickView!, animated: true)
+                calculateBlocks(blocksHit: 1)
             }
-            calculatePoints()
+            let points = calculatePoints()
+            print("currentPoints: ", points)
         }
     }
     
@@ -280,6 +284,11 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
                 break
             }
         }
+    }
+    
+    func calculateBlocks(blocksHit: Int) {
+        AppDelegate.Score.current.remainingBlocks = AppDelegate.Score.current.remainingBlocks - blocksHit
+        AppDelegate.Score.current.destroyedBlocks = AppDelegate.Score.current.destroyedBlocks + blocksHit
     }
     
     

@@ -94,6 +94,9 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     func startGame() {
         ballCount = AppDelegate.Settings.Ball.CountOfBalls
         AppDelegate.Score.current.points = 0
+        AppDelegate.Score.current.remainingBlocks = AppDelegate.Settings.Brick.Columns * AppDelegate.Settings.Brick.Rows
+        AppDelegate.Score.current.destroyedBlocks = 0
+   //     AppDelegate.Score.current.starttime = Int64(NSDate().timeIntervalSince1970)
         
         for view in breakoutView.subviews {
             breakoutGame.removeView(view)
@@ -170,7 +173,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         addToHighscore()
 //        breakoutGame.pauseGame()
         
-        let alert = UIAlertController(title: "Victory", message: "You scored \(AppDelegate.Score.current.points + 1) points", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Victory", message: "You scored \(AppDelegate.Score.current.points) points", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in
             self.startGame()
@@ -187,36 +190,61 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     func addToHighscore() {
         let points = breakoutGame.calculatePoints()
         
-        let current = Int64(NSDate().timeIntervalSince1970)
-        let z = current - AppDelegate.Score.current.starttime //playtime
-        let w = AppDelegate.Score.current.maxHardnessOfBlocks                               //max hardness
+        let current = NSDate().timeIntervalSince1970
+ //       let z = (NSNumber(value: current) as! Decimal) - (NSNumber(value: AppDelegate.Score.current.starttime) as! Decimal)  //playtime
+        let w = AppDelegate.Score.current.maxHardnessOfBlocks                      //max hardness
 
         
-        var best:[PointResult]? = AppDelegate.Score.best
-        if( best == nil) {
-            best = []
-            best!.append(PointResult(timestamp: current, countOfBlocks: AppDelegate.Score.current.destroyedBlocks, playtime: z, maxHardnessOfBricks: w, points: points))
-        } else {
-            //add
-            best!.append(PointResult(timestamp: current, countOfBlocks: AppDelegate.Score.current.destroyedBlocks, playtime: z, maxHardnessOfBricks: w, points: points))
-            
-            
-            //remove lowest points
-            if(best!.count > 1) {
-                var lowest = best![0];
-                var indexOfLowest = 0;
-                for index in 1 ..< best!.count {
-                    if(lowest.points > best![index].points) {
-                        lowest = best![index]
-                        indexOfLowest = index
-                    }
-                }
-                best!.remove(at: indexOfLowest)
-            }
+        var best:[PointResult]? = loadPointResultArray()
+        //TODO: currentBlocks!
+  //      DataHelper().saveHighscore(timestamp: NSNumber(value: current), countOfBlocks: NSNumber(value: 0), playtime: NSNumber(value: 0), maxHardnessOfBricks: NSNumber(value: w), points: NSNumber(value: points))
+    }
+    
+    //todo: in model?
+    func loadPointResultArray() -> [PointResult] {
+  //      let pointResultArray = DataHelper().fetchHighscores()
+        let points = AppDelegate.Score.points
+        let timestamps = AppDelegate.Score.timestamps
+        let countsOfBlocks = AppDelegate.Score.countsOfBlocks
+        let playtimes = AppDelegate.Score.playtimes
+        let maxHardnessesOfBricks = AppDelegate.Score.maxHardnessesOfBricks
+        
+        var pointResultArray = [PointResult]()
+        
+        for index in 0 ..< points.count {
+            let loadedPointResult = PointResult(timestamp: timestamps[index],
+                                                countOfBlocks: countsOfBlocks[index],
+                                                playtime: playtimes[index],
+                                                maxHardnessOfBricks: maxHardnessesOfBricks[index],
+                                                points: points[index])
+            pointResultArray.append(loadedPointResult)
         }
+        return pointResultArray
+    }
+    
+    
+    //todo: in model?
+    func storePointResultArray(array: [PointResult]) {
+   //     DataHelper().fetchHighscores()
+        var points:[Int] = [Int]()
+        var timestamps:[Int64] = [Int64]()
+        var countsOfBlocks:[Int] = [Int]()
+        var playtimes:[Int64] = [Int64]()
+        var maxHardnessesOfBricks:[Int] = [Int]()
         
-
-        AppDelegate.Score.best = best
+        for index in 0 ..< array.count {
+            points.append(array[index].points)
+            timestamps.append(array[index].timestamp)
+            countsOfBlocks.append(array[index].countOfBlocks)
+            playtimes.append(array[index].playtime)
+            maxHardnessesOfBricks.append(array[index].maxHardnessOfBricks)
+        }
+    //    DataHelper().saveHighscore(highscores: array)
+        AppDelegate.Score.points = points
+        AppDelegate.Score.timestamps = timestamps
+        AppDelegate.Score.countsOfBlocks = countsOfBlocks
+        AppDelegate.Score.playtimes = playtimes
+        AppDelegate.Score.maxHardnessesOfBricks = maxHardnessesOfBricks
     }
     
     func endGame() {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class HighscoreViewController: UITableViewController {
     
@@ -16,7 +17,7 @@ class HighscoreViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        highscore = AppDelegate.Score.best
+      //  highscore = AppDelegate.Score.best
         print(highscore)
 
         // Do any additional setup after loading the view.
