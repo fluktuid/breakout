@@ -30,9 +30,10 @@ class SettingsTableViewController: UITableViewController {
         super.viewDidLoad()
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         brickRowsStepper.value = Double(AppDelegate.Settings.Brick.Rows)
         brickRowsStepperLabel.text = "\(AppDelegate.Settings.Brick.Rows)"
         brickColumnsStepper.value = Double(AppDelegate.Settings.Brick.Columns)

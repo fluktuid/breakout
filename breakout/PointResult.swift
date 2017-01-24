@@ -8,20 +8,13 @@
 
 import Foundation
 
-class PointResult: NSObject,NSCoding {
-    let timestamp:Int64
-    let countOfBlocks:Int
-    let playtime:Int64
-    let maxHardnessOfBricks:Int
-    let points:Int
+class PointResult {
+    var timestamp:Int64
+    var countOfBlocks:Int
+    var playtime:Int64
+    var maxHardnessOfBricks:Int
+    var points:Int
     
-    /*
-    Zeitstempel des Spiels (wann wurde das Speil erfolgreich beendet)
-    Anzahl der Blöcke im Spiel
-    benötigte Spielzeit
-    die maximale Wertigkeit
-    die Punktzahl
-     */
     
     init(timestamp:Int64,countOfBlocks:Int,playtime:Int64,maxHardnessOfBricks:Int,points:Int) {
         self.timestamp = timestamp
@@ -30,5 +23,4 @@ class PointResult: NSObject,NSCoding {
         self.maxHardnessOfBricks = maxHardnessOfBricks
         self.points = points
     }
-
 }

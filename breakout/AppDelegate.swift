@@ -8,6 +8,7 @@
 
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -54,8 +55,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 get { return Defaults.object(forKey: "current.points") as? Int ?? 0 }
                 set { Defaults.set(newValue, forKey: "current.points") }
             }
-            static var starttime: Int64 {
-                get { return Defaults.object(forKey: "current.starttime") as? Int64 ?? 0 }
+            static var starttime: TimeInterval {
+                get { return Defaults.object(forKey: "current.starttime") as? TimeInterval ?? 0 }
                 set { Defaults.set(newValue, forKey: "current.starttime") }
             }
             static var maxHardnessOfBlocks: Int {
@@ -72,53 +73,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         
-        //CheckForNil
-        static var best:[PointResult]? {
+        static var points:[Int] {
             get {
-                let best = Defaults.object(forKey: "score.best") as? [PointResult] ?? [PointResult]()
-                return best
+                return Defaults.object(forKey: "score.bestPoints") as? [Int] ?? [1,2,4,8,16,32,64,128,256,512]
             }
             set {
-                Defaults.set(newValue, forKey: "score.best")
-                Defaults.synchronize()
+                Defaults.set(newValue, forKey: "score.bestPoints")
             }
         }
-    }
-    
-    
-    
-    /*
-    func savePlaces(){
-        let placesArray = [Place(lat: 123, lng: 123, name: "hi")]
-        let placesData = NSKeyedArchiver.archivedDataWithRootObject(placesArray)
-        UserDefaults.standardUserDefaults().setObject(placesData, forKey: "places")
-    }
-    
-    func loadPlaces(){
-        let placesData = UserDefaults.standard.object(forKey: "places") as? NSData
+        static var timestamps:[Int64] {
+            get {
+                return Defaults.object(forKey: "score.timestamps") as? [Int64] ?? [1,2,4,8,16,32,64,128,256,512]
+            }
+            set {
+                Defaults.set(newValue, forKey: "score.timestamps")
+            }
+        }
+        static var countsOfBlocks:[Int] {
+            get {
+                return Defaults.object(forKey: "score.countsOfBlocks") as? [Int] ?? [1,2,4,8,16,32,64,128,256,512]
+            }
+            set {
+                Defaults.set(newValue, forKey: "score.countsOfBlocks")
+            }
+        }
+        static var playtimes: [Int64] {
+            get {
+                return Defaults.object(forKey: "score.playtimes") as? [Int64] ?? [1,2,4,8,16,32,64,128,256,512]
+            }
+            set {
+                Defaults.set(newValue, forKey: "score.playtimes")
+            }
+        }
+        static var maxHardnessesOfBricks: [Int] {
+            get {
+                return Defaults.object(forKey: "score.maxHardnessesOfBricks") as? [Int] ?? [1,2,4,8,16,32,64,128,256,512]
+            }
+            set {
+                Defaults.set(newValue, forKey: "score.maxHardnessesOfBricks")
+            }
+        }
         
-        if let placesData = placesData {
-            let placesArray = NSKeyedUnarchiver.unarchiveObjectWithData(placesData) as? [Place]
-            
-            if let placesArray = placesArray {
-                // do something…
-            }
-            
-        }
     }
-*/
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -149,4 +145,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
+    
+    // MARK: - Core Data stack
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        /*
+         The persistent container for the application. This implementation
+         creates and returns a container, having loaded the store for the
+         application to it. This property is optional since there are legitimate
+         error conditions that could cause the creation of the store to fail.
+         */
+        let container = NSPersistentContainer(name: "Model")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                
+                /*
+                 Typical reasons for an error here include:
+                 * The parent directory does not exist, cannot be created, or disallows writing.
+                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
+                 * The device is out of space.
+                 * The store could not be migrated to the current model version.
+                 Check the error message to determine what the actual problem was.
+                 */
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
+    // MARK: - Core Data Saving support
+    
+    func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
 }

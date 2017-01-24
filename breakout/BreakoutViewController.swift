@@ -7,10 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     
     @IBOutlet weak var breakoutView: UIView!
+    
+    var highscores: [NSManagedObject] = []
     
     lazy var breakoutGame: BreakoutGameBehavior = {
         let lazyBreakoutGame = BreakoutGameBehavior()
@@ -80,7 +83,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     func createBall() {
         let ballViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Ball.Size.width / 2,
                                      y: breakoutView.bounds.maxY - Constants.Ball.BottomOffset - Constants.Ball.Size.height / 2)
-        ballView = UIView(frame: CGRect(origin: ballViewOrigin, size: Constants.Ball.Size))
+        ballView = Ellipse(frame: CGRect(origin: ballViewOrigin, size: Constants.Ball.Size))
         ballView!.layer.backgroundColor = Constants.Ball.BackgroundColor.cgColor
         ballView!.layer.cornerRadius = ballView!.layer.frame.width/2
         ballView!.type = BreakoutViewType.ball
@@ -92,8 +95,16 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     //Breakout game
     
     func startGame() {
+        if AppDelegate.Settings.Brick.HarderBricks {
+            AppDelegate.Score.current.maxHardnessOfBlocks = 3
+        } else {
+            AppDelegate.Score.current.maxHardnessOfBlocks = 1
+        }
         ballCount = AppDelegate.Settings.Ball.CountOfBalls
         AppDelegate.Score.current.points = 0
+        AppDelegate.Score.current.remainingBlocks = AppDelegate.Settings.Brick.Columns * AppDelegate.Settings.Brick.Rows
+        AppDelegate.Score.current.destroyedBlocks = 0
+        AppDelegate.Score.current.starttime = NSDate().timeIntervalSince1970
         
         for view in breakoutView.subviews {
             breakoutGame.removeView(view)
@@ -106,33 +117,23 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             createBall()
         }
         
+        
         let paddleViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Paddle.Size.width / 2, y: breakoutView.bounds.maxY - Constants.Paddle.BottomOffset)
         
-        paddleView = UIView(frame: CGRect(origin: paddleViewOrigin, size: Constants.Paddle.Size))
+        paddleView = Ellipse(frame: CGRect(origin: paddleViewOrigin, size: Constants.Paddle.Size))
+ 
         
         paddleView!.layer.backgroundColor = Constants.Paddle.BackgroundColor.cgColor
-        
-        
-        //ultra hard layer!
-   /*
+      
         let maskLayer = CAShapeLayer()
         maskLayer.frame = paddleView!.bounds
-        maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 10, y: 0, width: 10, height: 10)).cgPath
+        maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 100, height: 30)).cgPath
         paddleView!.layer.mask = maskLayer
- */
-        
-        //normal layer
-      /*
-        let maskLayer = CAShapeLayer()
-        maskLayer.frame = paddleView!.bounds
-        maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 100, height: 10)).cgPath
-        paddleView!.layer.mask = maskLayer
- */
-        
-        paddleView!.layer.cornerRadius = min(paddleView!.frame.size.height, paddleView!.frame.size.width) / 2.0
+ 
         paddleView!.type = BreakoutViewType.paddle
         paddleView!.clipsToBounds = true
         breakoutGame.addView(paddleView!)
+        
         
         let brickViewSize = CGSize(width: (breakoutView.bounds.width - Constants.Brick.Gap * CGFloat(Constants.Brick.Columns + 1))
             / CGFloat(Constants.Brick.Columns),
@@ -167,16 +168,14 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     func winGame() {
+        breakoutGame.pauseGame()
         addToHighscore()
-//        breakoutGame.pauseGame()
-        
-        let alert = UIAlertController(title: "Victory", message: "You scored \(AppDelegate.Score.current.points + 1) points", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Victory", message: "You scored \(AppDelegate.Score.current.points) points", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in
             self.startGame()
         }
         alert.addAction(newGameAction)
-        breakoutGame.pauseGame()
         present(alert, animated: true, completion: nil)
     }
     
@@ -187,40 +186,50 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     func addToHighscore() {
         let points = breakoutGame.calculatePoints()
         
-        let current = Int64(NSDate().timeIntervalSince1970)
-        let z = current - AppDelegate.Score.current.starttime //playtime
-        let w = AppDelegate.Score.current.maxHardnessOfBlocks                               //max hardness
+        let current = NSDate().timeIntervalSince1970           //current time
+        let z = current - AppDelegate.Score.current.starttime  //playtime
+        let w = AppDelegate.Score.current.maxHardnessOfBlocks  //max hardness
 
-        
-        var best:[PointResult]? = AppDelegate.Score.best
-        if( best == nil) {
-            best = []
-            best!.append(PointResult(timestamp: current, countOfBlocks: AppDelegate.Score.current.destroyedBlocks, playtime: z, maxHardnessOfBricks: w, points: points))
-        } else {
-            //add
-            best!.append(PointResult(timestamp: current, countOfBlocks: AppDelegate.Score.current.destroyedBlocks, playtime: z, maxHardnessOfBricks: w, points: points))
-            
-            
-            //remove lowest points
-            if(best!.count > 1) {
-                var lowest = best![0];
-                var indexOfLowest = 0;
-                for index in 1 ..< best!.count {
-                    if(lowest.points > best![index].points) {
-                        lowest = best![index]
-                        indexOfLowest = index
-                    }
-                }
-                best!.remove(at: indexOfLowest)
-            }
-        }
-        
 
-        AppDelegate.Score.best = best
+        addHighscore(points: NSNumber(value: points),
+                     maxHardnessOfBricks: NSNumber(value: w),
+                     playtime: NSNumber(value: z),
+                     countOfBlocks: NSNumber(value: (AppDelegate.Score.current.destroyedBlocks + AppDelegate.Score.current.remainingBlocks)),
+                     timestamp: NSNumber(value: current))
     }
+    
+    func addHighscore(points: NSNumber, maxHardnessOfBricks: NSNumber, playtime: NSNumber, countOfBlocks: NSNumber, timestamp:NSNumber) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        print("addHS points",points)
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity = NSEntityDescription.entity(forEntityName: "Highscore",
+                                                in: managedContext)!
+        
+        let test = NSManagedObject(entity: entity,
+                                     insertInto: managedContext)
+        
+        test.setValue(points, forKeyPath: "points")
+        test.setValue(maxHardnessOfBricks, forKeyPath: "maxHardnessOfBricks")
+        test.setValue(playtime, forKeyPath: "playtime")
+        test.setValue(countOfBlocks, forKeyPath: "countOfBlocks")
+        test.setValue(timestamp, forKeyPath: "timestamp")
+        
+        do {
+            try managedContext.save()
+            highscores.append(test)
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
     
     func endGame() {
         breakoutGame.pauseGame()
+      //  addToHighscore()
         let alert = UIAlertController(title: "Game Over", message: "you have lost", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in

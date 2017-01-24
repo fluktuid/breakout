@@ -11,7 +11,7 @@ public struct Constants {
     struct Ball {
         static var Size: CGSize { return CGSize(width: AppDelegate.Settings.Ball.Size, height: AppDelegate.Settings.Ball.Size) }
         static var StartSpreadAngle: CGFloat = 0.523599 // ca. pi/6
-        static let BackgroundColor = UIColor.cyan
+        static let BackgroundColor = UIColor.gray
         static let BottomOffset = CGFloat(40.0)
         
         
@@ -20,8 +20,8 @@ public struct Constants {
         static let MaxVelocity = CGFloat(700.0)
     }
     struct Paddle {
-        static let Size = CGSize(width: 100.0, height: -10.0)
-        static let BackgroundColor = UIColor.gray
+        static let Size = CGSize(width: 100.0, height: -20.0)
+        static let BackgroundColor = UIColor.darkGray
         static let BottomOffset = CGFloat(15.0)
     }
     struct Brick {
@@ -30,9 +30,9 @@ public struct Constants {
         static var Columns: Int { return AppDelegate.Settings.Brick.Columns }
         static let Gap = CGFloat(5.0)
         static let Height = CGFloat(30.0)
-        static let BackgroundColor = UIColor.magenta
-        static let HarderBackgroundColor = UIColor.gray
-        static let HardestBackgroundColor = UIColor.blue
+        static let BackgroundColor = UIColor.green
+        static let HarderBackgroundColor = UIColor.orange
+        static let HardestBackgroundColor = UIColor.red
         static let TopOffset = CGFloat(100.0)
     }
     struct Boundary {
