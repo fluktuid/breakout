@@ -10,21 +10,21 @@ import UIKit
 import CoreData
 
 class HighscoreViewController: UITableViewController {
-    
+
     var highscore: [NSManagedObject] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         highscore = loadHighscores()
     }
-    
+
     func loadHighscores() -> [NSManagedObject] {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return []
         }
-        
+
         let managedContext = appDelegate.persistentContainer.viewContext
-        
+
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Highscore")
         let sortDescriptor = NSSortDescriptor(key: "points", ascending: false)
         let sortDescriptors = [sortDescriptor]
@@ -36,7 +36,7 @@ class HighscoreViewController: UITableViewController {
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        
+
         return highscore
     }
 
@@ -44,17 +44,17 @@ class HighscoreViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     // Anzahl der Abschnitte (kann entfallen wenn nur ein Tabellenabschnitt benötigt wird)
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 10
     }
-    
+
     // Anzahl der Zeilen für einen bestimmten Abschnitt
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
-    
+
     // Optional: Überschriften für die Tabellenabschnitte
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
@@ -82,21 +82,21 @@ class HighscoreViewController: UITableViewController {
             return "##"
         }
     }
-    
+
     // Tabellenzellen als UITableViewCell-Objekte erzeugen
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         let cell = tableView.dequeueReusableCell(withIdentifier:"ScoreCell", for: indexPath)
-        
-        
+
+
         if highscore.count > indexPath.section {
             let score = highscore[indexPath.section]
-            
-            
+
+
         switch indexPath.row {
             case 0:
                 cell.textLabel?.text = "Points"
-                cell.detailTextLabel?.text = "\(score.value(forKey: "points")!)"         
+                cell.detailTextLabel?.text = "\(score.value(forKey: "points")!)"
             case 1:
                 cell.textLabel?.text = "Duration"
                 cell.detailTextLabel?.text = "\(score.value(forKey: "playtime")!)s"
@@ -123,12 +123,12 @@ class HighscoreViewController: UITableViewController {
         }
         return cell
     }
-    
+
     func getHighestPoints() -> NSNumber {
-        return highscore[0].value(forKey: "points") as! NSNumber // muss durch den NSSortDescriptor das Ergebnis mit den meisten Punkten sein!
+        return highscore[0].value(forKey: "points") as! NSNumber // must be the result with the most points because of the NSSortDescriptor
     }
-    
-    
+
+
     //damit beim Wiederanzeigen auch möglicherweise neue Punktestände angezeigt werden
     override func viewWillAppear(_ animated: Bool) {
         highscore = loadHighscores()
