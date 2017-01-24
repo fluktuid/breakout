@@ -229,7 +229,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     
     func endGame() {
         breakoutGame.pauseGame()
-        addToHighscore()
+      //  addToHighscore()
         let alert = UIAlertController(title: "Game Over", message: "you have lost", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in

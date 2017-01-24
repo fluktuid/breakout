@@ -220,7 +220,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     func resumeGame() {
         if let ballView = ballBehavior.items.first as? UIView {
             if pausedBallVelocity != nil {
-                gravity.removeItem(ballView)
+                gravity.addItem(ballView)
                 ballBehavior.addLinearVelocity(pausedBallVelocity!, for: ballView)
                 pausedBallVelocity = nil
             }
@@ -277,9 +277,11 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             let degrees = radians * Float((180 / M_PI))
             print(degrees)
         }
+        calculatePoints()
     }
     
     func collisionBehavior(_ behavior: UICollisionBehavior, beganContactFor item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, at p: CGPoint) {
+        let points = calculatePoints()
         var (ballView, _, _) = collisionViewsForItems([item])
         if ballView != nil {
             ballBehavior.limitLinearVelocity(min: Constants.Ball.MinVelocity, max: Constants.Ball.MaxVelocity, forItem: ballView!)

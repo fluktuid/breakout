@@ -36,17 +36,6 @@ class HighscoreViewController: UITableViewController {
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-        print(highscore.count)
-        
-        //logging
-        for score in highscore {
-            print("score:")
-            print(score.value(forKey: "countOfBlocks"))
-            print(score.value(forKey: "maxHardnessOfBricks"))
-            print(score.value(forKey: "playtime"))
-            print(score.value(forKey: "points"))
-            print(score.value(forKey: "timestamp"))
-        }
         
         return highscore
     }
@@ -135,9 +124,14 @@ class HighscoreViewController: UITableViewController {
         return cell
     }
     
+    func getHighestPoints() -> NSNumber {
+        return highscore[0].value(forKey: "points") as! NSNumber // muss durch den NSSortDescriptor das Ergebnis mit den meisten Punkten sein!
+    }
+    
     
     //damit beim Wiederanzeigen auch möglicherweise neue Punktestände angezeigt werden
     override func viewWillAppear(_ animated: Bool) {
         highscore = loadHighscores()
+        tabBarController?.tabBar.items![2].badgeValue = String(describing: getHighestPoints())
     }
 }
