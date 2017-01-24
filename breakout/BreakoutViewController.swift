@@ -5,39 +5,41 @@
 //  Created by Lukas Paluch on 12.12.16.
 //  Copyright © 2016 Lukas Paluch. All rights reserved.
 //
+//  the ViewController for the breakout game
+//
 
 import UIKit
 import CoreData
 
 class BreakoutViewController: UIViewController, BreakoutGameDelegate {
-    
+
     @IBOutlet weak var breakoutView: UIView!
     @IBOutlet weak var levelLabel: UILabel!
-    
+
     var highscores: [NSManagedObject] = []
-    
+
     var levelcounter = 1
-    
+
     lazy var breakoutGame: BreakoutGameBehavior = {
         let lazyBreakoutGame = BreakoutGameBehavior()
         lazyBreakoutGame.delegate = self
         return lazyBreakoutGame
     }()
-    
+
     public var ballCount:Int = AppDelegate.Settings.Ball.CountOfBalls
-    
+
     lazy var breakoutAnimator: UIDynamicAnimator = {
         let lazyBreakoutAnimator = UIDynamicAnimator(referenceView: self.breakoutView)
         return lazyBreakoutAnimator
     }()
-    
-    
+
+
     private var ballView: UIView? = nil
-    
+
     private var paddleView: UIView? = nil
-    
+
     private var brickViews: [[UIView]] = [[]]
-    
+
     // MARK: - View controller lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,21 +49,21 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     func setBackground() {
         breakoutView!.backgroundColor = Constants.BreakoutView.color
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         breakoutGame.resumeGame()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         startGame(continuing: true)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         breakoutGame.pauseGame()
     }
-    
+
     @IBAction func moveBall(_ tapGesture: UITapGestureRecognizer) {
         switch tapGesture.state {
         case .ended:
@@ -74,7 +76,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             break
         }
     }
-    
+
     @IBAction func movePaddle(_ panGesture: UIPanGestureRecognizer) {
         switch panGesture.state {
         case .began: fallthrough
@@ -87,7 +89,8 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             break
         }
     }
-    
+
+    //changes the label in the upper left corner
     func changeLevelLabel() {
         if(AppDelegate.Settings.Game.LevelMode) {
             levelLabel!.text = "Level \(String(levelcounter))"
@@ -97,7 +100,8 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             levelLabel.textColor = UIColor.lightGray
         }
     }
-    
+
+    //creates the ball
     func createBall() {
         let ballViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Ball.Size.width / 2,
                                      y: breakoutView.bounds.maxY - Constants.Ball.BottomOffset - Constants.Ball.Size.height / 2)
@@ -108,10 +112,10 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         ballView!.clipsToBounds=true
         breakoutGame.addView(ballView!)
     }
-    
-    
+
+
     //Breakout game
-    
+
     func startGame(continuing:Bool) {
         changeLevelLabel()
         if !continuing {
@@ -130,21 +134,21 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         AppDelegate.Score.current.remainingBlocks = AppDelegate.Settings.Brick.Columns * AppDelegate.Settings.Brick.Rows
         AppDelegate.Score.current.destroyedBlocks = 0
         AppDelegate.Score.current.starttime = NSDate().timeIntervalSince1970
-        
+
         for view in breakoutView.subviews {
             breakoutGame.removeView(view)
         }
-        
+
         breakoutView.type = BreakoutViewType.boundary
         breakoutGame.createBoundary(breakoutView)
-        
+
         for _ in 0..<AppDelegate.Settings.Ball.CountOfBalls {
             createBall()
         }
-        
-        
+
+
         let paddleViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Paddle.Size.width / 2, y: breakoutView.bounds.maxY - Constants.Paddle.BottomOffset)
-        
+
         paddleView = Ellipse(frame: CGRect(origin: paddleViewOrigin, size: Constants.Paddle.Size))
         paddleView!.layer.backgroundColor = Constants.Paddle.BackgroundColor.cgColor
         let maskLayer = CAShapeLayer()
@@ -154,19 +158,19 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         paddleView!.type = BreakoutViewType.paddle
         paddleView!.clipsToBounds = true
         breakoutGame.addView(paddleView!)
-        
-        
+
+
         var brickViewSize = CGSize(width: (breakoutView.bounds.width - Constants.Brick.Gap * CGFloat(Constants.Brick.Columns + 1))
             / CGFloat(Constants.Brick.Columns),
                                    height: Constants.Brick.Height)
         brickViews.reserveCapacity(Constants.Brick.Rows)
-        
+
         if levelcounter % 10 == 0 {   //10er Level
             brickViewSize = CGSize(width: (breakoutView.bounds.width - Constants.Brick.Gap * CGFloat(7 + 1))
                 / CGFloat(7),
                                    height: Constants.Brick.Height)
             brickViews.reserveCapacity(10)
-            
+
             for row in 0 ..< 7 {
                 var bricksColumn: [UIView] = []
                 bricksColumn.reserveCapacity(7)
@@ -190,6 +194,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
                                                   y:  Constants.Brick.TopOffset + (brickViewSize.height + Constants.Brick.Gap) * CGFloat(row))
                     let brickView = UIView(frame: CGRect(origin: brickViewOrigin, size: brickViewSize))
                     if AppDelegate.Settings.Game.LevelMode {
+                        //if levelmode is on
                         if levelcounter<3 {
                             if (levelcounter == 3) {
                                 brickView.layer.backgroundColor = Constants.Brick.HardestBackgroundColor.cgColor
@@ -199,6 +204,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
                                 brickView.layer.backgroundColor = Constants.Brick.BackgroundColor.cgColor
                             }
                         } else if(AppDelegate.Settings.Brick.HarderBricks) {
+                            //if levelmode is off
                             let harder = Int(arc4random_uniform(3))
                             if (harder == 2) {
                                 brickView.layer.backgroundColor = Constants.Brick.HardestBackgroundColor.cgColor
@@ -219,13 +225,14 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             }
         }
     }
-    
+
+    //gets called if level is finished
     func winGame() {
         print("calculatedP:",breakoutGame.calculatePoints())
         breakoutGame.savedPoints = breakoutGame.calculatePoints()
         breakoutGame.pauseGame()
         if(!AppDelegate.Settings.Game.LevelMode) {
-            //single level
+            //levelmode is off
             let alert = UIAlertController(title: "Victory", message: "You scored \(AppDelegate.Score.current.points) points", preferredStyle: UIAlertControllerStyle.alert)
             let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
                 (action: UIAlertAction!) -> Void in
@@ -235,53 +242,53 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             alert.addAction(newGameAction)
             present(alert, animated: true, completion: nil)
         } else {
-            //multi level
-            
-            //kleiner Hack, da diese Me
+            //levelmode is on
             levelcounter += 1
             startGame(continuing: true)
         }
     }
-    
+
+    //updates the badge of the breakoutviewcontroller tab to show the current points
     func updateCurrentBadge(points: Int) {
         tabBarController?.tabBar.items![0].badgeValue = String(points)
     }
-    
+
+    //adds the current game to the highscore
     func addToHighscore() {
         let points = breakoutGame.calculatePoints()
-        
+
         let current = NSDate().timeIntervalSince1970           //current time
         let z = current - AppDelegate.Score.current.starttime  //playtime
         let w = AppDelegate.Score.current.maxHardnessOfBlocks  //max hardness
-        
-        
+
+
         addHighscore(points: NSNumber(value: points),
                      maxHardnessOfBricks: NSNumber(value: w),
                      playtime: NSNumber(value: z),
                      countOfBlocks: NSNumber(value: (AppDelegate.Score.current.destroyedBlocks + AppDelegate.Score.current.remainingBlocks)),
                      timestamp: NSNumber(value: current))
     }
-    
+
     func addHighscore(points: NSNumber, maxHardnessOfBricks: NSNumber, playtime: NSNumber, countOfBlocks: NSNumber, timestamp:NSNumber) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
         print("addHS points",points)
-        
+
         let managedContext = appDelegate.persistentContainer.viewContext
-        
+
         let entity = NSEntityDescription.entity(forEntityName: "Highscore",
                                                 in: managedContext)!
-        
+
         let test = NSManagedObject(entity: entity,
                                    insertInto: managedContext)
-        
+
         test.setValue(points, forKeyPath: "points")
         test.setValue(maxHardnessOfBricks, forKeyPath: "maxHardnessOfBricks")
         test.setValue(playtime, forKeyPath: "playtime")
         test.setValue(countOfBlocks, forKeyPath: "countOfBlocks")
         test.setValue(timestamp, forKeyPath: "timestamp")
-        
+
         do {
             try managedContext.save()
             highscores.append(test)
@@ -289,8 +296,9 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             print("Could not save. \(error), \(error.userInfo)")
         }
     }
-    
-    
+
+
+    //gets called if ball hits the ground
     func endGame() {
         breakoutGame.pauseGame()
         let alert = UIAlertController(title: "Game Over", message: "you have lost\nYou scored \(AppDelegate.Score.current.points) points", preferredStyle: UIAlertControllerStyle.alert)
@@ -309,7 +317,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
         }
         present(alert, animated: true, completion: nil)
     }
-    
+
     public func getBallCount() -> Int {
         return ballCount
     }

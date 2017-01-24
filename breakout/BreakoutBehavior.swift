@@ -5,7 +5,8 @@
 //  Created by Lukas Paluch on 16.12.16.
 //  Copyright © 2016 Lukas Paluch. All rights reserved.
 //
-
+//  The behaviour and brain for the breakout game
+//
 
 import UIKit
 
@@ -36,14 +37,14 @@ public extension UIView {
 }
 
 class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
-    
+
     lazy private var gravity: UIGravityBehavior = {
         let gravity = UIGravityBehavior()
         gravity.magnitude = 0.15
         return gravity
     }()
-    
-    
+
+
     lazy private var collider: UICollisionBehavior = {
         let collider = UICollisionBehavior()
         collider.translatesReferenceBoundsIntoBoundary = false
@@ -51,7 +52,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         collider.collisionDelegate = self
         return collider
     }()
-    
+
     lazy private var ballBehavior: UIDynamicItemBehavior = {
         let ballBehavior = UIDynamicItemBehavior()
         ballBehavior.allowsRotation = true
@@ -62,10 +63,10 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         ballBehavior.charge = 0.15               //better bouncing effect
         return ballBehavior
     }()
-    
+
     lazy private var paddleBehavior: UIDynamicItemBehavior = {
         let paddleBehavior = UIDynamicItemBehavior()
-        
+
         //setzt die Einstellungen für alles
         paddleBehavior.allowsRotation = false
         paddleBehavior.charge = 0
@@ -76,10 +77,10 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         paddleBehavior.angularResistance = 0.0
         return paddleBehavior
     }()
-    
+
     lazy private var brickBehavior: UIDynamicItemBehavior = {
         let brickBehavior = UIDynamicItemBehavior()
-        
+
         //setzt die Einstellungen für alles
         brickBehavior.allowsRotation = false
         brickBehavior.density = 500.0
@@ -89,16 +90,16 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         brickBehavior.angularResistance = 0.0
         return brickBehavior
     }()
-    
+
     lazy private var paddleAttachment: UIAttachmentBehavior? = nil
-    
+
     lazy private var brickAttachments: [UIView: UIAttachmentBehavior] = [:]
-    
+
     var delegate: BreakoutGameDelegate? = nil
-    
+
     var savedPoints:Int = 0
-    
-    
+
+
     override init() {
         super.init()
         addChildBehavior(collider)
@@ -107,7 +108,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         addChildBehavior(brickBehavior)
         addChildBehavior(gravity)
     }
-    
+
     func addView(_ view: UIView) {
         dynamicAnimator?.referenceView?.addSubview(view)
         collider.addItem(view)
@@ -116,7 +117,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             dynamicAnimator?.referenceView?.addSubview(view)
             ballBehavior.addItem(view)
             gravity.addItem(view) // Schwerkraft, damit der Ball langsam nach unten kommt
-            
+
         case .paddle:
             dynamicAnimator?.referenceView?.addSubview(view)
             paddleAttachment = UIAttachmentBehavior(item: view, attachedToAnchor: view.center)
@@ -134,7 +135,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             return
         }
     }
-    
+
     func createBoundary(_ view: UIView) {
         let topLeft = CGPoint(x: view.frame.minX, y: view.frame.minY)
         let topRight = CGPoint(x: view.frame.maxX, y: view.frame.minY)
@@ -145,7 +146,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         collider.addBoundary(withIdentifier: Constants.Boundary.Left as NSCopying, from: topLeft, to: bottomLeft)
         collider.addBoundary(withIdentifier: Constants.Boundary.Right as NSCopying, from: topRight, to: bottomRight)
     }
-    
+
     func moveView(_ view: UIView, translation: CGPoint) {
         switch view.type {
         case .paddle:
@@ -159,7 +160,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             return
         }
     }
-    
+
     func pushView(_ view: UIView, angle: CGFloat, magnitude: CGFloat) {
         let viewPush = UIPushBehavior(items: [view], mode: UIPushBehaviorMode.instantaneous)
         viewPush.angle = angle
@@ -174,9 +175,9 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
                 view.backgroundColor = toColor
         }
     }
-    
+
     func removeView(_ view: UIView, animated: Bool = false) {
-        
+
         //führt bei Levelwechseln zu problemen, dh im Levelmode off
         if animated == true && !AppDelegate.Settings.Game.LevelMode{
             UIView.animate(withDuration: 0.1, animations: {
@@ -188,7 +189,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             })
             return
         }
-        
+
         switch view.type {
         case .ball:
             ballBehavior.removeItem(view)
@@ -210,10 +211,10 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         collider.removeItem(view)
         view.removeFromSuperview()
     }
-    
-    
+
+
     fileprivate var pausedBallVelocity: CGPoint?
-    
+
     func pauseGame() {
         if let ballView = ballBehavior.items.first as? UIView {
             gravity.removeItem(ballView)
@@ -221,7 +222,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             ballBehavior.addLinearVelocity(-pausedBallVelocity!, for: ballView)
         }
     }
-    
+
     func resumeGame() {
         if let ballView = ballBehavior.items.first as? UIView {
             if pausedBallVelocity != nil {
@@ -231,7 +232,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             }
         }
     }
-    
+
     func collisionBehavior(_ behavior: UICollisionBehavior, beganContactFor item1: UIDynamicItem, with item2: UIDynamicItem, at p: CGPoint) {
         let (ballView, _, brickView) = collisionViewsForItems([item1, item2])
         if ballView != nil {
@@ -255,7 +256,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             print("currentPoints: ", points)
         }
     }
-    
+
     func calculatePoints() -> Int{
         let b = AppDelegate.Score.current.remainingBlocks+AppDelegate.Score.current.destroyedBlocks     //count of blocks destroyed
         let current = NSDate().timeIntervalSince1970
@@ -263,13 +264,13 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         let zInInt = Int(z)
         let w = AppDelegate.Score.current.maxHardnessOfBlocks //max hardness
         let p = (b * w * 1000) / (zInInt + 30)
-        
-        
+
+
         AppDelegate.Score.current.points = Int(p)
         delegate?.updateCurrentBadge(points: Int(p) + savedPoints)
         return Int(p) + savedPoints
     }
-    
+
     func collisionBehavior(_ behavior: UICollisionBehavior, endedContactFor item1: UIDynamicItem, with item2: UIDynamicItem) {
         let (ballView, paddleView, _) = collisionViewsForItems([item1, item2])
         if ballView != nil {
@@ -282,7 +283,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         }
         calculatePoints()
     }
-    
+
     func collisionBehavior(_ behavior: UICollisionBehavior, beganContactFor item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, at p: CGPoint) {
         calculatePoints()
         var (ballView, _, _) = collisionViewsForItems([item])
@@ -304,13 +305,13 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             }
         }
     }
-    
+
     func calculateBlocks(blocksHit: Int) {
         AppDelegate.Score.current.remainingBlocks = AppDelegate.Score.current.remainingBlocks - blocksHit
         AppDelegate.Score.current.destroyedBlocks = AppDelegate.Score.current.destroyedBlocks + blocksHit
     }
-    
-    
+
+
     fileprivate func collisionViewsForItems(_ items: [UIDynamicItem]) -> (ballView: UIView?, paddleView: UIView?, brickView: UIView?) {
         var ballView: UIView? = nil
         var paddleView: UIView? = nil
