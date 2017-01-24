@@ -19,7 +19,7 @@ public enum BreakoutViewType: Int {
 public protocol BreakoutGameDelegate {
     func winGame() -> Void
     func endGame() -> Void
-    func updateCurrentBadge() -> Void
+    func updateCurrentBadge(points: Int) -> Void
     func removeBall() -> Void
     func getBallCount() -> Int
 }
@@ -56,9 +56,10 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         let ballBehavior = UIDynamicItemBehavior()
         ballBehavior.allowsRotation = true
         ballBehavior.density = 1.0
-        ballBehavior.elasticity = 4.0
-        ballBehavior.friction = 0.0
+        ballBehavior.elasticity = 6.0
+        ballBehavior.friction = 0.2
         ballBehavior.angularResistance = 0.1
+        ballBehavior.charge = 0.15               //better bouncing effect
         return ballBehavior
     }()
     
@@ -70,7 +71,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         paddleBehavior.charge = 0
         paddleBehavior.density = 2000.0
         paddleBehavior.elasticity = 1.0
-        paddleBehavior.friction = 20.0
+        paddleBehavior.friction = 0.2
         paddleBehavior.resistance = 3000.0
         paddleBehavior.angularResistance = 0.0
         return paddleBehavior
@@ -94,6 +95,9 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     lazy private var brickAttachments: [UIView: UIAttachmentBehavior] = [:]
     
     var delegate: BreakoutGameDelegate? = nil
+    
+    var savedPoints:Int = 0
+    
     
     override init() {
         super.init()
@@ -167,13 +171,14 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     }
     func changeBrickColor(_ view: UIView, toColor: UIColor) {
         UIView.animate(withDuration: 0.1) {
-            view.backgroundColor = toColor
+                view.backgroundColor = toColor
         }
     }
     
     func removeView(_ view: UIView, animated: Bool = false) {
         
-        if animated == true {
+        //führt bei Levelwechseln zu problemen, dh im Levelmode off
+        if animated == true && !AppDelegate.Settings.Game.LevelMode{
             UIView.animate(withDuration: 0.1, animations: {
                 view.alpha = 1.0
                 view.alpha = 0.5
@@ -256,14 +261,13 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         let current = NSDate().timeIntervalSince1970
         let z = current - AppDelegate.Score.current.starttime //playtime
         let zInInt = Int(z)
-        print(zInInt)
         let w = AppDelegate.Score.current.maxHardnessOfBlocks //max hardness
         let p = (b * w * 1000) / (zInInt + 30)
         
         
         AppDelegate.Score.current.points = Int(p)
-        delegate?.updateCurrentBadge()
-        return Int(p)
+        delegate?.updateCurrentBadge(points: Int(p) + savedPoints)
+        return Int(p) + savedPoints
     }
     
     func collisionBehavior(_ behavior: UICollisionBehavior, endedContactFor item1: UIDynamicItem, with item2: UIDynamicItem) {
@@ -275,13 +279,12 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
             ballBehavior.addLinearVelocity(CGPoint(x: 0.0, y: 10.0), for: ballView!)
             let radians = atan2f(Float(ballView!.transform.b), Float(ballView!.transform.a))
             let degrees = radians * Float((180 / M_PI))
-            print(degrees)
         }
         calculatePoints()
     }
     
     func collisionBehavior(_ behavior: UICollisionBehavior, beganContactFor item: UIDynamicItem, withBoundaryIdentifier identifier: NSCopying?, at p: CGPoint) {
-        let points = calculatePoints()
+        calculatePoints()
         var (ballView, _, _) = collisionViewsForItems([item])
         if ballView != nil {
             ballBehavior.limitLinearVelocity(min: Constants.Ball.MinVelocity, max: Constants.Ball.MaxVelocity, forItem: ballView!)

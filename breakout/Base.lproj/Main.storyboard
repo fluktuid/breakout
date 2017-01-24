@@ -28,6 +28,12 @@
                                     <outletCollection property="gestureRecognizers" destination="1l4-To-jmS" appends="YES" id="mPc-Ae-Nyb"/>
                                 </connections>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Level 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zRG-Z9-47f">
+                                <frame key="frameInset" minX="130" minY="323" width="115" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -35,11 +41,13 @@
                             <constraint firstItem="5fp-Fx-xon" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="4kv-gQ-ldm"/>
                             <constraint firstItem="5fp-Fx-xon" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="BgM-BK-Who"/>
                             <constraint firstAttribute="trailing" secondItem="5fp-Fx-xon" secondAttribute="trailing" id="Zxh-1g-z07"/>
+                            <constraint firstItem="zRG-Z9-47f" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="15" id="qIF-1g-0ki"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Breakout" id="56Q-KP-Czf"/>
                     <connections>
                         <outlet property="breakoutView" destination="5fp-Fx-xon" id="10V-3U-HKu"/>
+                        <outlet property="levelLabel" destination="zRG-Z9-47f" id="Ayw-sr-zQx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -54,7 +62,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2224" y="-159"/>
+            <point key="canvasLocation" x="2080.8000000000002" y="-197.45127436281859"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="r2K-4X-Gst">
@@ -319,6 +327,41 @@
                                             </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="Dqv-Ul-B9Y">
+                                        <rect key="frame" x="0.0" y="435.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dqv-Ul-B9Y" id="eEs-gd-NGg">
+                                            <frame key="frameInset" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wk7-IZ-IMh">
+                                                    <frame key="frameInset" minX="350" minY="7" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.50196081400000003" green="0.0" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <connections>
+                                                        <action selector="LevelModeIsOnValueChanged:" destination="2vE-80-LXS" eventType="valueChanged" id="P5c-uF-unc"/>
+                                                        <action selector="gameContinueAfterGameOverValueChanged:" destination="2vE-80-LXS" eventType="valueChanged" id="d3h-cx-RRS"/>
+                                                    </connections>
+                                                </switch>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Level Mode" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3bh-E3-gFU">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="3bh-E3-gFU" firstAttribute="leading" secondItem="eEs-gd-NGg" secondAttribute="leadingMargin" id="B6z-uE-3lk"/>
+                                                <constraint firstAttribute="centerY" secondItem="Wk7-IZ-IMh" secondAttribute="centerY" id="U5e-NF-2VO"/>
+                                                <constraint firstAttribute="centerY" secondItem="3bh-E3-gFU" secondAttribute="centerY" id="VBL-t3-cJk"/>
+                                                <constraint firstItem="Wk7-IZ-IMh" firstAttribute="top" secondItem="eEs-gd-NGg" secondAttribute="topMargin" constant="-2" id="gTd-jH-GMk"/>
+                                                <constraint firstItem="Wk7-IZ-IMh" firstAttribute="trailing" secondItem="eEs-gd-NGg" secondAttribute="trailingMargin" id="hVJ-rW-L6q"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="gTd-jH-GMk"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -336,6 +379,7 @@
                         <outlet property="brickRowsStepper" destination="ejw-vj-fHI" id="7Ns-gi-Ku7"/>
                         <outlet property="brickRowsStepperLabel" destination="GzF-7m-Blw" id="ZCw-Rb-J02"/>
                         <outlet property="gameContinueAfterGameOverSwitch" destination="kkA-2K-rXH" id="MM5-Ux-tRp"/>
+                        <outlet property="levelModeSwitch" destination="Wk7-IZ-IMh" id="COv-on-eUf"/>
                         <outlet property="makeHarderBricksSwitch" destination="I0T-uU-vt7" id="wEQ-5K-XAH"/>
                     </connections>
                 </tableViewController>
