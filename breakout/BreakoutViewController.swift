@@ -83,7 +83,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     func createBall() {
         let ballViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Ball.Size.width / 2,
                                      y: breakoutView.bounds.maxY - Constants.Ball.BottomOffset - Constants.Ball.Size.height / 2)
-        ballView = UIView(frame: CGRect(origin: ballViewOrigin, size: Constants.Ball.Size))
+        ballView = Ellipse(frame: CGRect(origin: ballViewOrigin, size: Constants.Ball.Size))
         ballView!.layer.backgroundColor = Constants.Ball.BackgroundColor.cgColor
         ballView!.layer.cornerRadius = ballView!.layer.frame.width/2
         ballView!.type = BreakoutViewType.ball
@@ -117,33 +117,23 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
             createBall()
         }
         
+        
         let paddleViewOrigin = CGPoint(x: breakoutView.bounds.midX - Constants.Paddle.Size.width / 2, y: breakoutView.bounds.maxY - Constants.Paddle.BottomOffset)
         
-        paddleView = UIView(frame: CGRect(origin: paddleViewOrigin, size: Constants.Paddle.Size))
+        paddleView = Ellipse(frame: CGRect(origin: paddleViewOrigin, size: Constants.Paddle.Size))
+ 
         
         paddleView!.layer.backgroundColor = Constants.Paddle.BackgroundColor.cgColor
-        
-        
-        //ultra hard layer!
-   /*
+      
         let maskLayer = CAShapeLayer()
         maskLayer.frame = paddleView!.bounds
-        maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 10, y: 0, width: 10, height: 10)).cgPath
+        maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 100, height: 30)).cgPath
         paddleView!.layer.mask = maskLayer
- */
-        
-        //normal layer
-      /*
-        let maskLayer = CAShapeLayer()
-        maskLayer.frame = paddleView!.bounds
-        maskLayer.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 100, height: 10)).cgPath
-        paddleView!.layer.mask = maskLayer
- */
-        
-        paddleView!.layer.cornerRadius = min(paddleView!.frame.size.height, paddleView!.frame.size.width) / 2.0
+ 
         paddleView!.type = BreakoutViewType.paddle
         paddleView!.clipsToBounds = true
         breakoutGame.addView(paddleView!)
+        
         
         let brickViewSize = CGSize(width: (breakoutView.bounds.width - Constants.Brick.Gap * CGFloat(Constants.Brick.Columns + 1))
             / CGFloat(Constants.Brick.Columns),
@@ -178,16 +168,14 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     }
     
     func winGame() {
+        breakoutGame.pauseGame()
         addToHighscore()
-//        breakoutGame.pauseGame()
-        
         let alert = UIAlertController(title: "Victory", message: "You scored \(AppDelegate.Score.current.points) points", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in
             self.startGame()
         }
         alert.addAction(newGameAction)
-        breakoutGame.pauseGame()
         present(alert, animated: true, completion: nil)
     }
     
@@ -198,14 +186,11 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     func addToHighscore() {
         let points = breakoutGame.calculatePoints()
         
-        let current = NSDate().timeIntervalSince1970
+        let current = NSDate().timeIntervalSince1970           //current time
         let z = current - AppDelegate.Score.current.starttime  //playtime
-        let w = AppDelegate.Score.current.maxHardnessOfBlocks                      //max hardness
+        let w = AppDelegate.Score.current.maxHardnessOfBlocks  //max hardness
 
-        
-        var best:[PointResult]? = loadPointResultArray()
-        //TODO: currentBlocks!
-        //TODO: playtime
+
         addHighscore(points: NSNumber(value: points),
                      maxHardnessOfBricks: NSNumber(value: w),
                      playtime: NSNumber(value: z),
@@ -213,58 +198,11 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
                      timestamp: NSNumber(value: current))
     }
     
-    //todo: in model?
-    func loadPointResultArray() -> [PointResult] {
-        var pointResultArray = DataHelper().fetchHighscores()
-        let points = AppDelegate.Score.points
-        let timestamps = AppDelegate.Score.timestamps
-        let countsOfBlocks = AppDelegate.Score.countsOfBlocks
-        let playtimes = AppDelegate.Score.playtimes
-        let maxHardnessesOfBricks = AppDelegate.Score.maxHardnessesOfBricks
-        
-       // var pointResultArray = [PointResult]()
-        
-        for index in 0 ..< points.count {
-            let loadedPointResult = PointResult(timestamp: timestamps[index],
-                                                countOfBlocks: countsOfBlocks[index],
-                                                playtime: playtimes[index],
-                                                maxHardnessOfBricks: maxHardnessesOfBricks[index],
-                                                points: points[index])
-            pointResultArray.append(loadedPointResult)
-        }
-        return pointResultArray
-    }
-    
-    
-    //todo: in model?
-    func storePointResultArray(array: [PointResult]) {
-        DataHelper().fetchHighscores()
-        var points:[Int] = [Int]()
-        var timestamps:[Int64] = [Int64]()
-        var countsOfBlocks:[Int] = [Int]()
-        var playtimes:[Int64] = [Int64]()
-        var maxHardnessesOfBricks:[Int] = [Int]()
-        
-        for index in 0 ..< array.count {
-            points.append(array[index].points)
-            timestamps.append(array[index].timestamp)
-            countsOfBlocks.append(array[index].countOfBlocks)
-            playtimes.append(array[index].playtime)
-            maxHardnessesOfBricks.append(array[index].maxHardnessOfBricks)
-        }
-    //    DataHelper().saveHighscore(highscores: array)
-        AppDelegate.Score.points = points
-        AppDelegate.Score.timestamps = timestamps
-        AppDelegate.Score.countsOfBlocks = countsOfBlocks
-        AppDelegate.Score.playtimes = playtimes
-        AppDelegate.Score.maxHardnessesOfBricks = maxHardnessesOfBricks
-    }
-    
-    
     func addHighscore(points: NSNumber, maxHardnessOfBricks: NSNumber, playtime: NSNumber, countOfBlocks: NSNumber, timestamp:NSNumber) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
+        print("addHS points",points)
         
         let managedContext = appDelegate.persistentContainer.viewContext
         
@@ -291,6 +229,7 @@ class BreakoutViewController: UIViewController, BreakoutGameDelegate {
     
     func endGame() {
         breakoutGame.pauseGame()
+        addToHighscore()
         let alert = UIAlertController(title: "Game Over", message: "you have lost", preferredStyle: UIAlertControllerStyle.alert)
         let newGameAction = UIAlertAction(title: "New Game", style: UIAlertActionStyle.cancel) {
             (action: UIAlertAction!) -> Void in

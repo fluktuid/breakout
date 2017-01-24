@@ -37,6 +37,13 @@ public extension UIView {
 
 class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     
+    lazy private var gravity: UIGravityBehavior = {
+        let gravity = UIGravityBehavior()
+        gravity.magnitude = 0.15
+        return gravity
+    }()
+    
+    
     lazy private var collider: UICollisionBehavior = {
         let collider = UICollisionBehavior()
         collider.translatesReferenceBoundsIntoBoundary = false
@@ -49,10 +56,9 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         let ballBehavior = UIDynamicItemBehavior()
         ballBehavior.allowsRotation = true
         ballBehavior.density = 1.0
-        ballBehavior.elasticity = 2.2
-        ballBehavior.friction = 5.0
-        ballBehavior.resistance = 0.0
-        ballBehavior.angularResistance = 0.0
+        ballBehavior.elasticity = 4.0
+        ballBehavior.friction = 0.0
+        ballBehavior.angularResistance = 0.1
         return ballBehavior
     }()
     
@@ -60,13 +66,13 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         let paddleBehavior = UIDynamicItemBehavior()
         
         //setzt die Einstellungen für alles
-        paddleBehavior.allowsRotation = true
+        paddleBehavior.allowsRotation = false
         paddleBehavior.charge = 0
-        paddleBehavior.density = 20000.0
-        paddleBehavior.elasticity = 8.5
+        paddleBehavior.density = 2000.0
+        paddleBehavior.elasticity = 1.0
         paddleBehavior.friction = 20.0
-        paddleBehavior.resistance = 30.0
-        paddleBehavior.angularResistance = 5.0
+        paddleBehavior.resistance = 3000.0
+        paddleBehavior.angularResistance = 0.0
         return paddleBehavior
     }()
     
@@ -78,7 +84,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         brickBehavior.density = 500.0
         brickBehavior.elasticity = 0.0
         brickBehavior.friction = 0.0
-        brickBehavior.resistance = 0.0
+        brickBehavior.resistance = 30.0
         brickBehavior.angularResistance = 0.0
         return brickBehavior
     }()
@@ -95,6 +101,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         addChildBehavior(ballBehavior)
         addChildBehavior(paddleBehavior)
         addChildBehavior(brickBehavior)
+        addChildBehavior(gravity)
     }
     
     func addView(_ view: UIView) {
@@ -104,6 +111,8 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         case .ball:
             dynamicAnimator?.referenceView?.addSubview(view)
             ballBehavior.addItem(view)
+            gravity.addItem(view) // Schwerkraft, damit der Ball langsam nach unten kommt
+            
         case .paddle:
             dynamicAnimator?.referenceView?.addSubview(view)
             paddleAttachment = UIAttachmentBehavior(item: view, attachedToAnchor: view.center)
@@ -157,7 +166,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
         dynamicAnimator?.addBehavior(viewPush)
     }
     func changeBrickColor(_ view: UIView, toColor: UIColor) {
-        UIView.animate(withDuration: 0.5) {
+        UIView.animate(withDuration: 0.1) {
             view.backgroundColor = toColor
         }
     }
@@ -165,7 +174,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     func removeView(_ view: UIView, animated: Bool = false) {
         
         if animated == true {
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: 0.1, animations: {
                 view.alpha = 1.0
                 view.alpha = 0.5
                 },
@@ -202,6 +211,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     
     func pauseGame() {
         if let ballView = ballBehavior.items.first as? UIView {
+            gravity.removeItem(ballView)
             pausedBallVelocity = ballBehavior.linearVelocity(for: ballView)
             ballBehavior.addLinearVelocity(-pausedBallVelocity!, for: ballView)
         }
@@ -210,6 +220,7 @@ class BreakoutGameBehavior: UIDynamicBehavior, UICollisionBehaviorDelegate {
     func resumeGame() {
         if let ballView = ballBehavior.items.first as? UIView {
             if pausedBallVelocity != nil {
+                gravity.removeItem(ballView)
                 ballBehavior.addLinearVelocity(pausedBallVelocity!, for: ballView)
                 pausedBallVelocity = nil
             }

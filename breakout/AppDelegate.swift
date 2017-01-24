@@ -97,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
  */
-        
+        /*
         static var points:[Int] {
             get {
                 return Defaults.object(forKey: "score.bestPoints") as? [Int] ?? [1,2,4,8,16,32,64,128,256,512]
@@ -138,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 Defaults.set(newValue, forKey: "score.maxHardnessesOfBricks")
             }
         }
-        
+        */
     }
     
     

@@ -16,6 +16,7 @@
 		8E6D93DC1E365E810055CC7D /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E6D93DA1E365E810055CC7D /* Model.xcdatamodeld */; };
 		8E6D93DE1E365F050055CC7D /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6D93DD1E365F050055CC7D /* DataController.swift */; };
 		8E6D93E21E3661310055CC7D /* DataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6D93E11E3661310055CC7D /* DataHelper.swift */; };
+		8E6E04EB1E3778D5001E863D /* Ellipse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6E04EA1E3778D5001E863D /* Ellipse.swift */; };
 		8E793E3B1E33A28600E2C370 /* HighscoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E793E3A1E33A28600E2C370 /* HighscoreViewController.swift */; };
 		8E793E3D1E33A51E00E2C370 /* PointResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E793E3C1E33A51E00E2C370 /* PointResult.swift */; };
 		8E8F85531E32838C00B4ADE6 /* PaddleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E8F85521E32838C00B4ADE6 /* PaddleView.swift */; };
@@ -56,6 +57,7 @@
 		8E6D93DB1E365E810055CC7D /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8E6D93DD1E365F050055CC7D /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		8E6D93E11E3661310055CC7D /* DataHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataHelper.swift; sourceTree = "<group>"; };
+		8E6E04EA1E3778D5001E863D /* Ellipse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ellipse.swift; sourceTree = "<group>"; };
 		8E793E3A1E33A28600E2C370 /* HighscoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighscoreViewController.swift; path = ../HighscoreViewController.swift; sourceTree = "<group>"; };
 		8E793E3C1E33A51E00E2C370 /* PointResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointResult.swift; sourceTree = "<group>"; };
 		8E8F85521E32838C00B4ADE6 /* PaddleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddleView.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				8E6D93DD1E365F050055CC7D /* DataController.swift */,
 				8E6D93E11E3661310055CC7D /* DataHelper.swift */,
 				8EEE712F1E36A026003D82A5 /* TestItem.swift */,
+				8E6E04EA1E3778D5001E863D /* Ellipse.swift */,
 			);
 			path = breakout;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				8E1471FD1E049A0C006C1F5B /* Ball.swift in Sources */,
 				8EE739461E05713100720FB1 /* Constants.swift in Sources */,
 				8E8F85531E32838C00B4ADE6 /* PaddleView.swift in Sources */,
+				8E6E04EB1E3778D5001E863D /* Ellipse.swift in Sources */,
 				8E6D93DE1E365F050055CC7D /* DataController.swift in Sources */,
 				8E1471F71E04999C006C1F5B /* BreakoutBehavior.swift in Sources */,
 				8E793E3B1E33A28600E2C370 /* HighscoreViewController.swift in Sources */,
