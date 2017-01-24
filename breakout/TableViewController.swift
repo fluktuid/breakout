@@ -14,21 +14,12 @@ class SettingsTableViewController: UITableViewController {
     @IBOutlet weak var brickRowsStepperLabel: UILabel!
     @IBOutlet weak var brickColumnsStepper: UIStepper!
     @IBOutlet weak var brickColumnsStepperLabel: UILabel!
-    
-    @IBOutlet weak var ballCountStepper: UIStepper!
-    @IBOutlet weak var ballCountStepperLabel: UILabel!
-    
     @IBOutlet weak var ballSizeStepper: UIStepper!
     @IBOutlet weak var ballSizeStepperLabel: UILabel!
     
-    
     @IBOutlet weak var makeHarderBricksSwitch: UISwitch!
     @IBOutlet weak var gameContinueAfterGameOverSwitch: UISwitch!
-    
-    // MARK: - View controller life cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    @IBOutlet weak var levelModeSwitch: UISwitch!
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,16 +29,14 @@ class SettingsTableViewController: UITableViewController {
         brickRowsStepperLabel.text = "\(AppDelegate.Settings.Brick.Rows)"
         brickColumnsStepper.value = Double(AppDelegate.Settings.Brick.Columns)
         brickColumnsStepperLabel.text = "\(AppDelegate.Settings.Brick.Columns)"
-        ballCountStepper.value = Double(AppDelegate.Settings.Brick.Rows)
-        ballCountStepperLabel.text = "\(AppDelegate.Settings.Brick.Rows)"
-        ballSizeStepper.value = Double(AppDelegate.Settings.Brick.Columns)
-        ballSizeStepperLabel.text = "\(AppDelegate.Settings.Brick.Columns)"
+        ballSizeStepper.value = Double(AppDelegate.Settings.Ball.Size)
+        ballSizeStepperLabel.text = "\(AppDelegate.Settings.Ball.Size)"
         
         gameContinueAfterGameOverSwitch.isOn = AppDelegate.Settings.Game.ContinueAfterGameOver
         makeHarderBricksSwitch.isOn = AppDelegate.Settings.Brick.HarderBricks
+        levelModeSwitch.isOn = AppDelegate.Settings.Game.LevelMode
     }
     
-    // MARK: - Settings value change handling
     @IBAction func brickRowsValueChanged(_ sender: UIStepper) {
         let numRows = Int(sender.value)
         brickRowsStepperLabel.text = "\(numRows)";
@@ -58,12 +47,6 @@ class SettingsTableViewController: UITableViewController {
         let numColumns = Int(sender.value)
         brickColumnsStepperLabel.text = "\(numColumns)";
         AppDelegate.Settings.Brick.Columns = numColumns;
-    }
-    
-    @IBAction func ballCountValueChanged(_ sender: UIStepper) {
-        let balls = Int(sender.value)
-        ballCountStepperLabel.text = "\(balls)"
-        AppDelegate.Settings.Ball.CountOfBalls = balls
     }
     
     @IBAction func ballSizeValueChanged(_ sender: UIStepper) {
@@ -79,4 +62,7 @@ class SettingsTableViewController: UITableViewController {
         AppDelegate.Settings.Game.ContinueAfterGameOver = sender.isOn
     }
     
+    @IBAction func LevelModeIsOnValueChanged(_ sender: UISwitch) {
+        AppDelegate.Settings.Game.LevelMode = sender.isOn
+    }
 }

@@ -46,6 +46,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 get { return Defaults.object(forKey: "Game.ContinueAfterGameOver") as? Bool ?? true }
                 set { Defaults.set(newValue, forKey: "Game.ContinueAfterGameOver") }
             }
+            static var LevelMode: Bool {
+                get { return Defaults.object(forKey: "Game.LevelMode") as? Bool ?? true }
+                set { Defaults.set(newValue, forKey: "Game.LevelMode") }
+            }
         }
     }
     struct Score {
